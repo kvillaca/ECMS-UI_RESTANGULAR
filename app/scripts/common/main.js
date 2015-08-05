@@ -292,10 +292,10 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.searchQuery = input.trim();
             $scope.spinnerOn();
 
-            Restangular.setDefaultHeaders({
+           /* Restangular.setDefaultHeaders({
                 'X-ECMS-Session': ecmsSession.getSession(),
                 'Content-Type': 'application/json'
-            });
+            });*/
             //Restangular.all('v1/documents?' + $.param(paramsValue)).
             Restangular.all('v1/documents?' + $this.makeParams(paramsValue)).
                 customGET('DocumentSearch').
@@ -420,6 +420,7 @@ angular.module('ecmsEcmsUiApp')
                 password: null,
                 rememberMe: false
             };
+            updateRestangularHeaders.removeSessionId();
             $state.go('login');
             toggleFeatures.toggle('login');
         };

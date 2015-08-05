@@ -29,6 +29,9 @@ angular.module('ecmsEcmsUiApp', [
             // Restangular initial configs
             RestangularProvider.setBaseUrl('/ecms/rest/');
             RestangularProvider.setFullResponse(true);
+            RestangularProvider.setDefaultHeaders({
+                'Content-Type': 'application/json'
+            });
             //RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
             //    var extractedData;
             //    if (operation === "getList") {

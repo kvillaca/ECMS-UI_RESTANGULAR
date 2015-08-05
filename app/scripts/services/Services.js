@@ -210,7 +210,26 @@ app.service('getIPService', function ($http, $q) {
     });
 
 
-
+/**
+ * @ngdoc function
+ * @name ecmsEcmsUiApp.service:isPrivateService
+ * @description returns True if the view is private and user is not logged in; False in all other cases
+ */
+app.service('updateRestangularHeaders', function (Restangular, ecmsSession) {
+    return {
+        addSessionId: function () {
+            Restangular.setDefaultHeaders({
+                'Content-Type': 'application/json',
+                'X-ECMS-Session': ecmsSession.getSession()
+            });
+        },
+        removeSessionId: function () {
+            Restangular.setDefaultHeaders({
+                'Content-Type': 'application/json'
+            });
+        }
+    };
+});
 
 
 

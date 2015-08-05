@@ -9,16 +9,16 @@
  * @requires $scope
  * */
 angular.module('ecmsEcmsUiApp')
-    .controller('LoginController', function($scope,
-                                  $rootScope,
-                                  $state,
-                                  $sessionStorage,
-                                  ecmsSession,
-                                  goTo,
-                                  toggleFeatures,
-                                  Restangular,
-                                  $timeout){
-
+    .controller('LoginController', function ($scope,
+                                             $rootScope,
+                                             $state,
+                                             $sessionStorage,
+                                             ecmsSession,
+                                             goTo,
+                                             toggleFeatures,
+                                             Restangular,
+                                             updateRestangularHeaders,
+                                             $timeout) {
 
 
         var $this = this;   // alias for this controller
@@ -67,6 +67,8 @@ angular.module('ecmsEcmsUiApp')
                         $this.sessionKey = response.data.UserLoginEvent.SessionKey;
                         $sessionStorage.$default({session: null});
                         ecmsSession.set($this.sessionKey, true);
+                        // update headers for the rest of the app because all rest calls from now on will need auth info
+                        updateRestangularHeaders.addSessionId();
                         $scope.loginError = false;
                         $scope.userLoggedIn = true;
                         toggleFeatures.toggle('search.input');
@@ -80,7 +82,6 @@ angular.module('ecmsEcmsUiApp')
                     });
                 });
         };
-
 
 
         // clear form data when user clicks back into login form after an error
