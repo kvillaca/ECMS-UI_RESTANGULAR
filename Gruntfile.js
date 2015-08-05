@@ -369,7 +369,7 @@ module.exports = function (grunt) {
         // ngmin tries to make the code safe for minification automatically by
         // using the Angular long form for dependency injection. It doesn't work on
         // things like resolve or inject so those have to be done manually.
-        ngmin: {
+        /*ngmin: {
             dist: {
                 files: [
                     {
@@ -380,7 +380,7 @@ module.exports = function (grunt) {
                     }
                 ]
             }
-        },
+        },*/
 
 
         // Replace Google CDN references
@@ -578,7 +578,7 @@ module.exports = function (grunt) {
         'autoprefixer:dist', //Adds vendor prefixes to css
         'useminPrepare', //Uses index.html to identify targets for concat, uglify, cssmin, filerev
         'concat', //Concats files in build:css and build:js within index.html
-        'ngmin', //AngularJS-safe Uglify
+        'ngAnnotate', //AngularJS-safe Uglify
         'cssmin', //Minifies css identified in build:css
         'copy:dist', //Copies html, images, stuff from /app to /dist
         'filerev', //Adds dynamic revision to file names to bust cache

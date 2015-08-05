@@ -9,3 +9,4 @@ mixins.css
 all.css
 *.iml
 *.war
+*.log

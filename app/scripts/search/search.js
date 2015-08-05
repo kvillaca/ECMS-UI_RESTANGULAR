@@ -7,7 +7,7 @@
  * Main Controller of the search logic
  */
 angular.module('ecmsEcmsUiApp')
-    .controller('SearchCtrl', function ($scope, $rootScope, $window, goTo, updateDocumentInfo) {
+    .controller('SearchCtrl', function () { //$scope, $rootScope, $window, goTo, updateDocumentInfo
 
         //var $this = this;   // alias for this controller
 

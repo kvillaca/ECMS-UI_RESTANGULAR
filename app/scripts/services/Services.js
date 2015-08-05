@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @ngdoc service
  * @name
@@ -20,11 +22,11 @@ app.service('updateSession', function($sessionStorage){
 /**
  * Terminate
  */
-app.service("terminate", function($rootScope, $sessionStorage) {
-    return (function() {
+app.service('terminate', function($rootScope, $sessionStorage) {
+    return function() {
         $rootScope.sessionKey = null;
         delete $sessionStorage.session;
-    });
+    };
 });
 
 
@@ -70,7 +72,7 @@ app.service('toggleFeatures', function($rootScope, $state, updateSession, redire
 /*
  * Redirect, to try avoid $broadcast and $on
  */
-app.service('redirect', function($rootScope, goTo, updateDocumentInfo) {
+app.service('redirect', function($rootScope, goTo, updateDocumentInfo, $window) {
     this.to = function(toState, toParams, fromState) {
         switch (toState.name) {
             case 'search.input':
@@ -90,7 +92,7 @@ app.service('redirect', function($rootScope, goTo, updateDocumentInfo) {
                 angular.element($window).scrollTop (0);
                 break;
         }
-    }
+    };
 });
 
 
@@ -106,8 +108,8 @@ app.service('updateDocumentInfo', function($rootScope) {
                     break;
                 }
             }
-        return scope;
-    }
+        //return scope;
+    };
 });
 
 
@@ -144,20 +146,20 @@ app.service('goTo', function($state) {
 app.service('ecmsSession', function($sessionStorage) {
    this.getSession = function() {
         return $sessionStorage.session;
-    }
+    };
 
    this.getUserLoggedIn  = function() {
        return $sessionStorage.userLoggedIn;
-   }
+   };
 
    this.set = function(sessionToSet) {
         $sessionStorage.session = sessionToSet;
-    }
+    };
 
    this.set = function(sessionToSet, userLoggedInToSet) {
        $sessionStorage.session = sessionToSet;
        $sessionStorage.userLoggedIn = userLoggedInToSet;
-   }
+   };
 });
 
 

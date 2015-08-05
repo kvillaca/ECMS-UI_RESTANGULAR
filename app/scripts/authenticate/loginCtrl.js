@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @ngdoc controller
  * @name login
@@ -61,8 +62,8 @@ angular.module('ecmsEcmsUiApp')
 
             // Restangular call for Authenticate user!
             Restangular.one('v1').post('authenticate', angular.toJson(jsonInput, true)).
-                then(function(response) {
-                    $timeout(function() {
+                then(function (response) {
+                    $timeout(function () {
                         $this.sessionKey = response.data.UserLoginEvent.SessionKey;
                         $sessionStorage.$default({session: null});
                         ecmsSession.set($this.sessionKey, true);
@@ -71,14 +72,15 @@ angular.module('ecmsEcmsUiApp')
                         toggleFeatures.toggle('search.input');
                         $state.go('search.input');
                     });
+                }, function (fail) {
+                    $timeout(function () {
+                        $scope.loginError = true;
+                        ecmsSession.set(undefined, false);
+                        console.log(fail);
+                    });
                 });
-            }, function(fail) {
-                $timeout(function() {
-                    $scope.loginError = true;
-                    ecmsSession.set(undefined, false);;
-                    console.log(fail);
-                });
-            };
+        };
+
 
 
         // clear form data when user clicks back into login form after an error

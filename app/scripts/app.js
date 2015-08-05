@@ -155,7 +155,7 @@ angular.module('ecmsEcmsUiApp', [
          * that the user shouldn't be to continue.
          */
         Restangular.setErrorInterceptor(function(response) {
-            if (response.status != OK_RESPONSE) {
+            if (response.status !== OK_RESPONSE) {
                 switch (response.status) {
                     case 500:
                         $rootScope.loginErrorText = response.data;
@@ -168,7 +168,7 @@ angular.module('ecmsEcmsUiApp', [
                         $rootScope.loginErrorText = 'Oops. Something went wrong. Find Will Millman.';
                         break;
                     default:
-                        $rootScope.loginErrorText = fail.status + ': ' + fail.statusText;
+                        $rootScope.loginErrorText = response.status + ': ' + response.statusText;
                 }
                 return false;
             } else {

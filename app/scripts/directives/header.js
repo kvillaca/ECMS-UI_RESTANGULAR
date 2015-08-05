@@ -32,7 +32,7 @@ angular.module('ecmsEcmsUiApp')
             }
 
 
-            $timeout(setHeight, 1);
+            $timeout(setHeight, 250);
 
 
             scope.$on('updateNavbar', function (event, data) {
