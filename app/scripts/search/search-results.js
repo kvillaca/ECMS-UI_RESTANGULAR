@@ -9,7 +9,8 @@
 angular.module('ecmsEcmsUiApp')
     .controller('SearchResultsCtrl', function ($scope,
                                                $rootScope,
-                                               $timeout) {
+                                               $timeout,
+                                               spinner) {
 
         var $this = this;   // alias for this controller
 
@@ -57,12 +58,12 @@ angular.module('ecmsEcmsUiApp')
 
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                     if ($rootScope.state.currentView === 'search.results') {
-                        $scope.spinnerOn();
+                        spinner.on();
                         $rootScope.state.pageNumber = newPage;
                         $rootScope.state.pageSize = pageSize;
                         $scope.updateSearchResults().then(function () {
                             $this.updateGridOptions();
-                            $scope.spinnerOff();
+                            spinner.off();
                         });
                     }
                 });

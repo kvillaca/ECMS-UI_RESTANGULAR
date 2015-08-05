@@ -249,5 +249,21 @@ app.service('paramsToString', function () {
     };
 });
 
+/**
+ * @ngdoc function
+ * @name ecmsEcmsUiApp.service:spinner
+ * @description toggles the loading spinner on and off
+ */
+app.service('spinner', function ($rootScope) {
+    return {
+        on: function () {
+            $rootScope.loading = true;
+        },
+        off: function () {
+            $rootScope.loading = false;
+        }
+    };
+});
+
 
 

@@ -25,7 +25,8 @@ angular.module('ecmsEcmsUiApp')
                                       terminate,
                                       Restangular,
                                       paramsToString,
-                                      getIPService) {
+                                      getIPService,
+                                      spinner) {
 
         var $this = this;   // alias for this controller
 
@@ -121,20 +122,7 @@ angular.module('ecmsEcmsUiApp')
             .then(ipSuccess, ipError);
 
 
-        /****************************************
-         * TRANSITION SPINNER
-         ***************************************/
-
-            // hide spinner initially
-        $scope.loading = false;
-
-        $scope.spinnerOn = function () {
-            $scope.loading = true;
-        };
-
-        $scope.spinnerOff = function () {
-            $scope.loading = false;
-        };
+        spinner.off();
 
 
         /***********************************************
@@ -291,7 +279,7 @@ angular.module('ecmsEcmsUiApp')
             //}
             //else {  // input is ok, proceed with getting search results
             $rootScope.state.searchQuery = input.trim();
-            $scope.spinnerOn();
+            spinner.on();
 
            /* Restangular.setDefaultHeaders({
                 'X-ECMS-Session': ecmsSession.getSession(),
@@ -300,7 +288,7 @@ angular.module('ecmsEcmsUiApp')
             Restangular.all('v1/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
-                    $scope.spinnerOff();
+                    spinner.off();
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
                     $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
                     if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
@@ -313,14 +301,14 @@ angular.module('ecmsEcmsUiApp')
                         $scope.clearSearchResults();
                         $scope.goTo('search.input');       // probably temporary
                     }
-                    $scope.spinnerOff();
+                    spinner.off();
                 }, function (fail) {
                     $timeout(function () {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
                         $scope.clearSearchResults();
                         $scope.goTo('search.input');       // probably temporary
                         console.log(fail);
-                        $scope.spinnerOff();
+                        spinner.off();
                     });
                 });
             //}
