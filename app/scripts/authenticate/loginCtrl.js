@@ -25,7 +25,7 @@ angular.module('ecmsEcmsUiApp')
 
         // Scope defaults
         $scope.loginError = false;
-        $scope.userLoggedIn = ecmsSession.getUserLoggedIn() || false;
+        //$scope.userLoggedIn = ecmsSession.getUserLoggedIn() || false;
         $scope.credentials = {
             username: 'kvillaca',
             password: 'JavaRules11!',

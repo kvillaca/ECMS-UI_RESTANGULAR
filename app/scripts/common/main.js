@@ -62,7 +62,6 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-
         /**
          * Toggle scope variables on view change -
          *
@@ -141,7 +140,7 @@ angular.module('ecmsEcmsUiApp')
          * STATE
          ***********************************************/
 
-            // App state defaults
+        // App state defaults
         //$rootScope.state = $sessionStorage.lastState || {
         //        showActionBar: false,
         //        showNavBar: false,
@@ -256,7 +255,6 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-
         /**********************************************
          * EVERYTHING from here down should be in a search controller.
          * SEARCH QUERY
@@ -264,6 +262,11 @@ angular.module('ecmsEcmsUiApp')
 
         /**
          * Submits the search query
+         * @param input
+         */
+
+        /**
+         * @TODO - move to Search controller
          * @param input
          */
         $scope.submitQuery = function (input) {
@@ -286,31 +289,31 @@ angular.module('ecmsEcmsUiApp')
             //    $rootScope.state.errorMessage = inputValidator.error;
             //}
             //else {  // input is ok, proceed with getting search results
-                $rootScope.state.searchQuery = input.trim();
-                $scope.spinnerOn();
+            $rootScope.state.searchQuery = input.trim();
+            $scope.spinnerOn();
 
-                Restangular.setDefaultHeaders({
-                  'X-ECMS-Session': ecmsSession.getSession(),
-                    'Content-Type': 'application/json'
-                });
-                //Restangular.all('v1/documents?' + $.param(paramsValue)).
-                Restangular.all('v1/documents?' + $this.makeParams(paramsValue)).
-                    customGET('DocumentSearch').
-                    then(function (resp) {
-                            $scope.spinnerOff();
-                            $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
-                            $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
-                            if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
-                                $rootScope.state.searchResults = $this.tailorData($rootScope.state.searchResults);
-                                $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
-                                $rootScope.$broadcast('resizeGrid');
-                                $scope.goTo('search.results');
-                            } else {
-                                $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
-                                $scope.clearSearchResults();
-                                $scope.goTo('search.input');       // probably temporary
-                            }
-                            $scope.spinnerOff();
+            Restangular.setDefaultHeaders({
+                'X-ECMS-Session': ecmsSession.getSession(),
+                'Content-Type': 'application/json'
+            });
+            //Restangular.all('v1/documents?' + $.param(paramsValue)).
+            Restangular.all('v1/documents?' + $this.makeParams(paramsValue)).
+                customGET('DocumentSearch').
+                then(function (resp) {
+                    $scope.spinnerOff();
+                    $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
+                    $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
+                    if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
+                        $rootScope.state.searchResults = $this.tailorData($rootScope.state.searchResults);
+                        $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
+                        $rootScope.$broadcast('resizeGrid');
+                        $scope.goTo('search.results');
+                    } else {
+                        $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
+                        $scope.clearSearchResults();
+                        $scope.goTo('search.input');       // probably temporary
+                    }
+                    $scope.spinnerOff();
                 }, function (fail) {
                     $timeout(function () {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
@@ -323,6 +326,10 @@ angular.module('ecmsEcmsUiApp')
             //}
         };
 
+        /**
+         * @TODO - move to service for all restangular calls to share
+         * @param input
+         */
         $this.makeParams = function (paramsValue) {
             var params = '';
             for (var i in paramsValue) {
@@ -336,6 +343,10 @@ angular.module('ecmsEcmsUiApp')
          * Grabs a fresh set of search results from the backend
          * This is used when changes are made to a document and the search results view grid needs to be updated with those new changes
          * This is an abridged version of submitQuery method
+         */
+        /**
+         * @TODO - move to service for global use
+         * @param input
          */
         $scope.updateSearchResults = function () {
 
@@ -417,7 +428,6 @@ angular.module('ecmsEcmsUiApp')
             $scope.toDefaultState();
             updateSession.session($rootScope.state);
         });
-
 
 
         /**
