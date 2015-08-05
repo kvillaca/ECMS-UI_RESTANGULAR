@@ -24,6 +24,7 @@ angular.module('ecmsEcmsUiApp')
                                       $timeout,
                                       terminate,
                                       Restangular,
+                                      paramsToString,
                                       getIPService) {
 
         var $this = this;   // alias for this controller
@@ -296,8 +297,7 @@ angular.module('ecmsEcmsUiApp')
                 'X-ECMS-Session': ecmsSession.getSession(),
                 'Content-Type': 'application/json'
             });*/
-            //Restangular.all('v1/documents?' + $.param(paramsValue)).
-            Restangular.all('v1/documents?' + $this.makeParams(paramsValue)).
+            Restangular.all('v1/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
                     $scope.spinnerOff();
@@ -324,19 +324,6 @@ angular.module('ecmsEcmsUiApp')
                     });
                 });
             //}
-        };
-
-        /**
-         * @TODO - move to service for all restangular calls to share
-         * @param input
-         */
-        $this.makeParams = function (paramsValue) {
-            var params = '';
-            for (var i in paramsValue) {
-                params += i + '=' + paramsValue[i] + '&';
-            }
-            params = params.substring(0, params.length - 1);    // remove last &
-            return params;
         };
 
         /**

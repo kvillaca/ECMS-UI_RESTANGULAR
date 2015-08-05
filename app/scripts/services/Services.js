@@ -212,8 +212,8 @@ app.service('getIPService', function ($http, $q) {
 
 /**
  * @ngdoc function
- * @name ecmsEcmsUiApp.service:isPrivateService
- * @description returns True if the view is private and user is not logged in; False in all other cases
+ * @name ecmsEcmsUiApp.service:updateRestangularHeaders
+ * @description updates headers in Restangular
  */
 app.service('updateRestangularHeaders', function (Restangular, ecmsSession) {
     return {
@@ -227,6 +227,24 @@ app.service('updateRestangularHeaders', function (Restangular, ecmsSession) {
             Restangular.setDefaultHeaders({
                 'Content-Type': 'application/json'
             });
+        }
+    };
+});
+
+/**
+ * @ngdoc function
+ * @name ecmsEcmsUiApp.service:updateRestangularHeaders
+ * @description updates headers in Restangular
+ */
+app.service('paramsToString', function () {
+    return {
+        implode: function (object) {
+            var params = '';
+            for (var paramName in object) {
+                params += paramName + '=' + object[paramName] + '&';
+            }
+            params = params.substring(0, params.length - 1);    // remove last &
+            return params;
         }
     };
 });
