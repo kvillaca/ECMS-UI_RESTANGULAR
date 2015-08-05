@@ -27,7 +27,7 @@ app.service('terminate', function($rootScope, $sessionStorage) {
         $rootScope.sessionKey = null;
         delete $sessionStorage.session;
     };
-});
+}); 
 
 
 
