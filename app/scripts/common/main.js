@@ -23,7 +23,6 @@ angular.module('ecmsEcmsUiApp')
                                       searchErrorService,
                                       goTo,
                                       $q,
-                                      spinner,
                                       $timeout,
                                       terminate,
                                       Restangular,
