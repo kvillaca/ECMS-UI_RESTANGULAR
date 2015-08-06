@@ -11,7 +11,30 @@ angular.module('ecmsEcmsUiApp')
                                                $rootScope,
                                                $timeout) {
 
-        var $this = this;   // alias for this controller
+        // Declaring all variables
+        // alias for this controller
+        var $this = this;
+        // template for grid cell with popover tooltip and anchor
+        var templateWithTooltip = 'templates/cellWithTooltip.html';
+        // template for grid cell with popover tooltip, no anchor
+        var templateJournalTitleWithTooltip = 'templates/templateJournalTitleWithTooltip.html';
+        // template for plain cell content (no popover, no anchor)
+        var templatePlain = 'templates/cell.html';
+
+
+        $scope.searchQueryInput;
+        $scope.searchResults = undefined;
+        $scope.pageSize = undefined;
+        $scope.pageSizes = undefined;
+        $scope.totalItems = undefined;
+        $scope.pageNumber = undefined;
+
+        $scope.paginationOptions = {
+            pageNumber: undefined,
+            pageSize: undefined,
+            pageSizes: undefined
+        };
+        $scope.gridApi = undefined;
 
         /*if ($rootScope.state.pageNumber) {
             $this.paginationOptions = {
@@ -21,12 +44,6 @@ angular.module('ecmsEcmsUiApp')
             };
         }*/
 
-        // template for grid cell with popover tooltip and anchor
-        var templateWithTooltip = 'templates/cellWithTooltip.html';
-        // template for grid cell with popover tooltip, no anchor
-        var templateJournalTitleWithTooltip = 'templates/templateJournalTitleWithTooltip.html';
-        // template for plain cell content (no popover, no anchor)
-        var templatePlain = 'templates/cell.html';
 
         $scope.gridOptions = {
             data: $rootScope.state.searchResults,
@@ -61,13 +78,24 @@ angular.module('ecmsEcmsUiApp')
                         $rootScope.state.pageNumber = newPage;
                         $rootScope.state.pageSize = pageSize;
                         $scope.updateSearchResults().then(function () {
-                            $this.updateGridOptions();
+                            $scope.updateGridOptions();
                             $scope.spinnerOff();
                         });
                     }
                 });
             }
         };
+
+
+
+        $scope.initView = function() {
+            $scope.updateGridOptions();
+            if ($rootScope.state.searchResults) {
+                $scope.updateGridOptions();
+            }
+        }
+
+
 
         /**
          * Blurs a button after click
@@ -79,6 +107,7 @@ angular.module('ecmsEcmsUiApp')
             }
         };
 
+
         // selects all rows in grid
         $scope.selectAll = function(e) {
 
@@ -88,6 +117,7 @@ angular.module('ecmsEcmsUiApp')
             }
             $scope.gridApi.selection.selectAllRows();
         };
+
 
         // un-selects all rows in grid
         $scope.clearAll = function(e) {
@@ -100,6 +130,7 @@ angular.module('ecmsEcmsUiApp')
                 $scope.gridApi.selection.clearSelectedRows();
             }
         };
+
 
         /**
          * Calculates the last document number for pagination purposes
@@ -129,8 +160,7 @@ angular.module('ecmsEcmsUiApp')
          * @param totalHits
          * @param pageSize
          */
-        $this.updateGridOptions = function () {
-
+        $scope.updateGridOptions = function () {
             $scope.searchQueryInput = $rootScope.state.searchQuery;
             $scope.searchResults = $rootScope.state.searchResults;
             $scope.pageSize = $rootScope.state.pageSize;
@@ -138,7 +168,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.totalItems = $rootScope.state.totalItems;
             $scope.pageNumber = $rootScope.state.pageNumber;
 
-            $this.paginationOptions = {
+            $scope.paginationOptions = {
                 pageNumber: $rootScope.state.pageNumber,
                 pageSize: $rootScope.state.pageSize,
                 pageSizes: $rootScope.state.pageSizes
@@ -168,18 +198,18 @@ angular.module('ecmsEcmsUiApp')
             }
 
             resize(Math.min($rootScope.state.totalItems, $rootScope.state.pageSize, $rootScope.state.searchResults.length));
-
+            //console.log("state.searchResults.length = " + $scope.state.searchResults.length)
         };
 
 
-        $rootScope.$on('resizeGrid', function () {
-            if ($rootScope.state.searchResults) {
-                $this.updateGridOptions();
-            }
-        });
+        //$rootScope.$on('resizeGrid', function () {
+        //    if ($rootScope.state.searchResults) {
+        //        $scope.updateGridOptions();
+        //    }
+        //});
 
-        if ($rootScope.state.searchResults) {
-            $this.updateGridOptions();
-        }
+        //if ($rootScope.state.searchResults) {
+        //    $scope.updateGridOptions();
+        //}
 
     });

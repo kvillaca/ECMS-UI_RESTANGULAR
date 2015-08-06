@@ -37,13 +37,13 @@ app.service('terminate', function($rootScope, $sessionStorage) {
  * @param view, scope variable
  * @return scope updated
  */
-app.service('toggleFeatures', function($rootScope, $state, updateSession, redirect){
+app.service('toggleFeatures', function($rootScope, $state, updateSession, redirect, toDefaultState){
     this.toggle = function (view) {
         $rootScope.state.currentView = view;
         // toggle features per the view we're loading
         switch (view) {
             case 'login':
-                $rootScope.toDefaultState();
+                toDefaultState.setToDefaultState();
                 break;
             case 'search.input':
                 $rootScope.state.showNavBar = true;
@@ -137,9 +137,6 @@ app.service('goTo', function($state) {
 
 
 
-
-
-
 /**
  * Session - Get and Set.
  */
@@ -210,7 +207,102 @@ app.service('getIPService', function ($http, $q) {
     });
 
 
+/**
+ * @param input
+ */
+app.service('makeParams', function() {
+    this.paramList = function (paramsValue) {
+        var params = '';
+        for (var i in paramsValue) {
+            params += i + '=' + paramsValue[i] + '&';
+        }
+        params = params.substring(0, params.length - 1);    // remove last &
+        return params;
+    };
+})
 
+
+
+/**
+ * Takes data from the server and puts it in this format:
+ * [ {fieldName1: value1 , fieldName2: value2, fieldName3: value3, ... }, { ... }, { ... } ]
+ * It also "extends" each the returned data row by adding an index property (1-based)
+ * The index property is to be used for Prev/Next logic
+ * @param dataIn
+ */
+app.service('tailorData', function($rootScope) {
+    this.data = function (dataIn) {
+        var returnObject = [];
+        for (var i in dataIn) {
+            var row = dataIn [i];
+            var fields = row.HitField;
+            var thisRow = {};
+            for (var j in fields) {
+                var field = fields[j];
+                var name = field.FieldName;
+                var value = field.Text[0];
+                thisRow[name] = value;
+            }
+
+            // extend properties to include search order index
+            thisRow.searchResultIndex = (($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize) + parseInt(i) + 1; // weee!
+
+            // row is ready to pass to the grid
+            returnObject.push(thisRow);
+        }
+        return returnObject;
+    }
+});
+
+
+
+
+/*****************************************
+ * SIGN OUT
+ *****************************************/
+app.service('signout', function($rootScope, $sessionStorage, terminate, $state, toggleFeatures) {
+    this.out =function()  {
+        $rootScope.loginError = false;
+        $rootScope.userLoggedIn = false;
+        $sessionStorage.userLoggedIn = false;
+        terminate();
+        $rootScope.credentials = {
+            username: null,
+            password: null,
+            rememberMe: false
+        };
+        //$state.go('login');
+        toggleFeatures.toggle('login');
+    }
+
+});
+
+
+///**
+// * All to default state
+// */
+app.service('toDefaultState', function($rootScope, gridOptions) {
+    return {
+        setToDefaultState: function() {
+            $rootScope.state = {
+                showActionBar: false,
+                showNavBar: false,
+                currentView: 'login',
+                currentDocument: {},
+                errorBox: null,
+                errorMessage: null,
+                searchQuery: null,
+                searchResults: [],
+                pageNumber: 1,
+                pageSize: gridOptions.pageSize,
+                pageSizes: gridOptions.pageSizes,
+                totalItems: null,
+                rawXML: null,
+                dirtyRawXML: false
+            };
+        }
+    };
+});
 
 
 

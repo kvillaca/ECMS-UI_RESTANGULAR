@@ -29,6 +29,9 @@ angular.module('ecmsEcmsUiApp', [
             // Restangular initial configs
             RestangularProvider.setBaseUrl('/ecms/rest/');
             RestangularProvider.setFullResponse(true);
+
+            // SetDefaultHeader doesn't working in here due ecmsSession hasn't been defined when the interpreter reaches this line
+            //RestangularProvider.setDefaultHeaders({ 'X-ECMS-Session': ecmsSession.getSession(), 'Content-Type': 'application/json' });
             //RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
             //    var extractedData;
             //    if (operation === "getList") {
@@ -131,6 +134,15 @@ angular.module('ecmsEcmsUiApp', [
         // Root variables, mean module public variables.
         var OK_RESPONSE = 200;
 
+        // I couldn't make the LoginCtrl see the parent $scope.
+        $rootScope.loginError = false;
+        $rootScope.userLoggedIn =  false;
+        $rootScope.credentials = {
+            username: null,
+            password: null,
+            rememberMe: false
+        };
+        $rootScope.codeMirrorArea = null;
         $rootScope.errorCode = undefined;
         $rootScope.loginErrorText = undefined;
         $rootScope.state = $sessionStorage.lastState || {

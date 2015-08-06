@@ -24,14 +24,16 @@ angular.module('ecmsEcmsUiApp')
         var $this = this;   // alias for this controller
 
         // Scope defaults
-        $scope.loginError = false;
-        //$scope.userLoggedIn = ecmsSession.getUserLoggedIn() || false;
+        $rootScope.loginError = false;
+        $rootScope.userLoggedIn = ecmsSession.getUserLoggedIn() || false;
+
+        // This is scoped because once the user is valid
         $scope.credentials = {
             username: 'kvillaca',
             password: 'JavaRules11!',
             rememberMe: false
         };
-        $scope.codeMirrorArea = null;
+        $rootScope.codeMirrorArea = null;
 
 
         /*
@@ -67,14 +69,24 @@ angular.module('ecmsEcmsUiApp')
                         $this.sessionKey = response.data.UserLoginEvent.SessionKey;
                         $sessionStorage.$default({session: null});
                         ecmsSession.set($this.sessionKey, true);
-                        $scope.loginError = false;
-                        $scope.userLoggedIn = true;
+                        $rootScope.loginError = false;
+                        $rootScope.userLoggedIn = true;
+                        $rootScope.credentials = {
+                            username: $scope.credentials.username,
+                            password: undefined,
+                            rememberMe: false
+                        };
+                        $scope.credentials = {
+                            username: undefined,
+                            password: undefined,
+                            rememberMe: false
+                        };
                         toggleFeatures.toggle('search.input');
                         $state.go('search.input');
                     });
                 }, function (fail) {
                     $timeout(function () {
-                        $scope.loginError = true;
+                        $rootScope.loginError = true;
                         ecmsSession.set(undefined, false);
                         console.log(fail);
                     });
@@ -85,9 +97,9 @@ angular.module('ecmsEcmsUiApp')
 
         // clear form data when user clicks back into login form after an error
         $scope.clear = function () {
-            if ($scope.loginError) {
-                $scope.loginError = false;
-                $scope.credentials = {
+            if ($rootScope.loginError) {
+                $rootScope.loginError = false;
+                $rootScope.credentials = {
                     username: null,
                     password: null,
                     rememberMe: false

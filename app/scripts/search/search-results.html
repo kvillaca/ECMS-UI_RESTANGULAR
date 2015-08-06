@@ -1,5 +1,5 @@
 <div ng-include="search-input.html"></div>
-<div ng-if="state.searchResults.length">
+<div ng-init="initView()" ng-if="state.searchResults.length">
     <h5 class="gray"><strong>My results:</strong> {{(state.pageNumber - 1) * state.pageSize + 1}} - {{lastIndex()}} of {{state.totalItems}}</h5>
 
     <div ng-show="false"><!-- ng-show="!visibleView.doc && visibleView.input" -->
