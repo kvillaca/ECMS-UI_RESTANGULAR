@@ -15,11 +15,11 @@ angular.module('ecmsEcmsUiApp')
                                              getSearchResultsService,
                                              searchErrorService,
                                              goTo,
-                                             clearSearchResults,
                                              paramsToString,
                                              tailorData,
                                              $timeout,
                                              Restangular,
+                                             RESTAPIversion,
                                              spinner) {
 
         /**
@@ -35,7 +35,7 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.errorBox = null;
             $scope.clearDocument();
             if ($rootScope.state.currentView === 'search.input') {
-                clearSearchResults.clear();
+                $scope.clearSearchResults();
             }
             $rootScope.$broadcast('updateSearchInputHeight');
         };
@@ -74,7 +74,7 @@ angular.module('ecmsEcmsUiApp')
 
             spinner.on();
 
-            Restangular.all('documents?' + paramsToString.implode(paramsValue)).
+            Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
                     spinner.off();
@@ -87,14 +87,14 @@ angular.module('ecmsEcmsUiApp')
                         goTo.go('search.results');
                     } else {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
-                        clearSearchResults.clear();
+                        $scope.clearSearchResults();
                         goTo.go('search.input');       // probably temporary
                     }
                     spinner.off();
                 }, function (fail) {
                     $timeout(function () {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
-                        clearSearchResults.clear();
+                        $scope.clearSearchResults();
                         goTo.go('search.input');       // probably temporary
                         //console.log(fail);
                         spinner.off();

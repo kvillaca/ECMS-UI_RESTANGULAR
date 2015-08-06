@@ -14,6 +14,7 @@ angular.module('ecmsEcmsUiApp')
                                                 validateEndpoint,
                                                 ecmsSession,
                                                 Restangular,
+                                                RESTAPIversion,
                                                 paramsToString) {
 
 
@@ -70,7 +71,7 @@ angular.module('ecmsEcmsUiApp')
 
                     // now Update
                     //$http(config).then(updateSuccess, updateError);
-                    Restangular.one('documents', request.Document.DocumentId).customPUT(request)
+                    Restangular.one(RESTAPIversion + '/documents', request.Document.DocumentId).customPUT(request)
                         .then(updateSuccess, updateError);
                 }
 
@@ -103,7 +104,7 @@ angular.module('ecmsEcmsUiApp')
                     deferred.reject(validateErrorBase(error));
                 }
 
-                Restangular.post ('methods/document/validate', request)
+                Restangular.post (RESTAPIversion + '/methods/document/validate', request)
                     .then(validateSuccess, validateError);
 
                 return deferred.promise;
@@ -131,7 +132,7 @@ angular.module('ecmsEcmsUiApp')
 
                     // now Update
                     //$http(config).then(updateSuccess, updateError);
-                    Restangular.one('documents', request.Document.DocumentId).customPUT(request)
+                    Restangular.one(RESTAPIversion + '/documents', request.Document.DocumentId).customPUT(request)
                         .then(updateSuccess, updateError);
 
                 }

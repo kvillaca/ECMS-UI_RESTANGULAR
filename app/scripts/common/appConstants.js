@@ -7,6 +7,7 @@ angular.module('ecmsEcmsUiApp')
         {label: 'Contact', route: 'contact'},
         {label: 'Browser Compatibility', route: 'https://proquest.atlassian.net/wiki/display/TKB/Browser+Compatibility'}
     ])
+    .constant('RESTAPIversion', 'v1')
     .constant('ERRORS', {
         'emptySearchQuery': 'Please enter a search query.',
         'shortSearchQuery': 'Please enter a search query at least 3 characters long.',

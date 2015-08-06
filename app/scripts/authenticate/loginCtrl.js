@@ -17,6 +17,7 @@ angular.module('ecmsEcmsUiApp')
                                              goTo,
                                              toggleFeatures,
                                              Restangular,
+                                             RESTAPIversion,
                                              updateRestangularHeaders,
                                              $timeout) {
 
@@ -63,7 +64,7 @@ angular.module('ecmsEcmsUiApp')
 
 
             // Restangular call for Authenticate user!
-            Restangular.one('v1').post('authenticate', angular.toJson(jsonInput, true)).
+            Restangular.one(RESTAPIversion).post('authenticate', angular.toJson(jsonInput, true)).
                 then(function (response) {
                     $timeout(function () {
                         $this.sessionKey = response.data.UserLoginEvent.SessionKey;
