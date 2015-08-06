@@ -509,13 +509,13 @@ angular.module('ecmsEcmsUiApp')
                 spinner.on();
 
                 if (callbackLabel === 'close') {
-                    updateDocumentService.close($scope.document)
+                    updateDocumentService.update($scope.document)
                         .then(closeDocumentSuccess, closeDocumentError);
                 }
 
                 if (callbackLabel === 'next' || callbackLabel === 'prev') {
                     $scope.successDirection = callbackLabel;
-                    updateDocumentService.close($scope.document)
+                    updateDocumentService.update($scope.document)
                         .then(goToDocumentSuccess, goToDocumentError);
                 }
 

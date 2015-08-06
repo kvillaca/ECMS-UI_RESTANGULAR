@@ -108,9 +108,9 @@ angular.module('ecmsEcmsUiApp')
 
                 return deferred.promise;
 
-            },
-            // used for Save and Exit
-            close: function (request) {
+            }
+            // used for Save and Exit - is this needed? Use update above instead!
+            /*close: function (request) {
 
                 var deferred = $q.defer();
 
@@ -146,7 +146,7 @@ angular.module('ecmsEcmsUiApp')
                     .then(validateSuccess, validateError);
 
                 return deferred.promise;
-            }
+            }*/
         };
 
     });
