@@ -83,8 +83,7 @@ angular.module('ecmsEcmsUiApp')
                             password: undefined,
                             rememberMe: false
                         };
-                        toggleFeatures.toggle('search.input');
-                        $state.go('search.input');
+                        goTo.go('search.input');
                     });
                 }, function (fail) {
                     $timeout(function () {

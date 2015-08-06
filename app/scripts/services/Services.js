@@ -137,6 +137,7 @@ app.service('goTo', function($rootScope, $state) {
                 $state.go(newView);
             }
         }
+        $rootScope.$broadcast ('updateNavbar');
     };
 });
 

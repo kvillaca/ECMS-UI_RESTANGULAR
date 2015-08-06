@@ -6,7 +6,7 @@
  */
 
 angular.module('ecmsEcmsUiApp')
-    .directive('header', function ($timeout, $window) {
+    .directive('header', function ($timeout, $window, $rootScope) {
 
 
         function link(scope, element) {
@@ -35,7 +35,7 @@ angular.module('ecmsEcmsUiApp')
             $timeout(setHeight, 250);
 
 
-            scope.$on('updateNavbar', function (event, data) {
+            $rootScope.$on('updateNavbar', function (event, data) {
                 if (data === 'doc') {
                     collapseAllowed = true;
                 }
@@ -43,7 +43,7 @@ angular.module('ecmsEcmsUiApp')
                     collapseAllowed = false;
                     window.scrollTop (0);
                 }
-                $timeout(setHeight, 10);
+                $timeout(setHeight, 250);
             });
 
             window.bind('scroll', function() {
