@@ -194,9 +194,16 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-        $rootScope.$on('signout', function () {
+        $scope.signOut = function () {
             toDefaultState.setToDefaultState();
             updateSession.session($rootScope.state);
             signout.out();
+        };
+
+        $rootScope.$on('signout', function () {
+            $scope.signOut();
+            /*toDefaultState.setToDefaultState();
+            updateSession.session($rootScope.state);
+            signout.out();*/
         });
     });

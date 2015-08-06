@@ -12,18 +12,18 @@ var app = angular.module('ecmsEcmsUiApp');
 /**
  * Save state to session
  */
-app.service('updateSession', function($sessionStorage){
-        this.session = function (scopeState) {
-            $sessionStorage.lastState = scopeState;
-        };
+app.service('updateSession', function ($sessionStorage) {
+    this.session = function (scopeState) {
+        $sessionStorage.lastState = scopeState;
+    };
 });
 
 
 /**
  * Terminate
  */
-app.service('terminate', function($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders) {
-    return function() {
+app.service('terminate', function ($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders) {
+    return function () {
         $rootScope.sessionKey = null;
         delete $sessionStorage.session;
 
@@ -34,14 +34,12 @@ app.service('terminate', function($rootScope, $sessionStorage, ecmsSession, upda
 });
 
 
-
-
 /**
  * Toggle scope variables on view change
  * @param view, scope variable
  * @return scope updated
  */
-app.service('toggleFeatures', function($rootScope, $state, updateSession, redirect, toDefaultState){
+app.service('toggleFeatures', function ($rootScope, $state, updateSession, redirect, toDefaultState) {
     this.toggle = function (view) {
         $rootScope.state.currentView = view;
         // toggle features per the view we're loading
@@ -72,57 +70,55 @@ app.service('toggleFeatures', function($rootScope, $state, updateSession, redire
 });
 
 
-
 /*
  * Redirect, to try avoid $broadcast and $on
  */
-app.service('redirect', function($rootScope, goTo, updateDocumentInfo, $window) {
-    this.to = function(toState, toParams, fromState) {
-        switch (toState.name) {
+app.service('redirect', function ($rootScope, goTo, updateDocumentInfo, $window) {
+    this.to = function (toState, toParams, fromState) {
+        switch (toState) {
             case 'search.input':
             case 'search':
-                goTo.go(toState.name);
+                goTo.go(toState);
                 break;
             case 'search.results':
                 if (!fromState.name || fromState.name === 'search.results') {
                     goTo.go('search.input');
                 } else {
-                    goTo.go(toState.name);
+                    goTo.go(toState);
                 }
                 break;
             case 'search.doc':
                 updateDocumentInfo(toParams.id);
-                goTo.go(toState.name, {id: toParams.id});
-                angular.element($window).scrollTop (0);
+                goTo.go(toState, {id: toParams.id});
+                angular.element($window).scrollTop(0);
                 break;
         }
     };
 });
 
 
-app.service('updateDocumentInfo', function($rootScope) {
-    this.update = function(id) {
-            $rootScope.state.currentDocument.id = id;
-            for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
-                var row = $rootScope.state.searchResults [i];
-                if (row.documentid === id) {
-                    $rootScope.state.currentDocument.index = row.searchResultIndex;
-                    $rootScope.state.currentDocument.indexOnPage = (i + 1);
-                    $rootScope.$broadcast ('updateCurrentDocument');
-                    break;
-                }
+app.service('updateDocumentInfo', function ($rootScope) {
+    this.update = function (id) {
+        $rootScope.state.currentDocument.id = id;
+        for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
+            var row = $rootScope.state.searchResults [i];
+            if (row.documentid === id) {
+                $rootScope.state.currentDocument.index = row.searchResultIndex;
+                $rootScope.state.currentDocument.indexOnPage = (i + 1);
+                $rootScope.$broadcast('updateCurrentDocument');
+                break;
             }
+        }
         //return scope;
     };
 });
-
 
 
 /**
  * Go to new view
  *
  */
-app.service('goTo', function($rootScope, $state) {
+app.service('goTo', function ($rootScope, $state) {
     this.go = function (newView, options, scopeStateCurrentDocumentId) {
         //toggleFeatures.toggle(newView);
         $rootScope.state.currentView = newView;
@@ -137,40 +133,39 @@ app.service('goTo', function($rootScope, $state) {
                 $state.go(newView);
             }
         }
-        $rootScope.$broadcast ('updateNavbar');
+        $rootScope.$broadcast('updateNavbar');
     };
 });
-
 
 
 /**
  * Session - Get and Set.
  */
-app.service('ecmsSession', function($sessionStorage) {
-   this.getSession = function() {
+app.service('ecmsSession', function ($sessionStorage) {
+    this.getSession = function () {
         return $sessionStorage.session;
     };
 
-   this.getUserLoggedIn  = function() {
-       return $sessionStorage.userLoggedIn;
-   };
+    this.getUserLoggedIn = function () {
+        return $sessionStorage.userLoggedIn;
+    };
 
-   this.set = function(sessionToSet) {
+    this.set = function (sessionToSet) {
         $sessionStorage.session = sessionToSet;
     };
 
-   this.set = function(sessionToSet, userLoggedInToSet) {
-       $sessionStorage.session = sessionToSet;
-       $sessionStorage.userLoggedIn = userLoggedInToSet;
-   };
+    this.set = function (sessionToSet, userLoggedInToSet) {
+        $sessionStorage.session = sessionToSet;
+        $sessionStorage.userLoggedIn = userLoggedInToSet;
+    };
 });
 
 
 /**
-  * @ngdoc function
-  * @name ecmsEcmsUiApp.service:isPrivateService
-  * @description returns True if the view is private and user is not logged in; False in all other cases
-  */
+ * @ngdoc function
+ * @name ecmsEcmsUiApp.service:isPrivateService
+ * @description returns True if the view is private and user is not logged in; False in all other cases
+ */
 app.service('isPrivateService', function (ecmsSession) {
     return {
         check: function (toState) {
@@ -185,7 +180,6 @@ app.service('isPrivateService', function (ecmsSession) {
 });
 
 
-
 /**
  * @ngdoc function
  * @name ecmsEcmsUiApp.service:getIPService
@@ -193,24 +187,24 @@ app.service('isPrivateService', function (ecmsSession) {
  */
 
 app.service('getIPService', function ($http, $q) {
-        return {
-            getIP: function () {
-                var requestUrl = 'http://freegeoip.net/json/';
-                var deferred = $q.defer();
-                var config = {
-                    url: requestUrl,
-                    headers: { 'Content-Type' : 'application/json' }
-                };
-                $http(config)
-                    .then(function (result) {
-                        deferred.resolve(result);
-                    }, function () {
-                        deferred.reject('getIPService error');
-                    });
-                return deferred.promise;
-            }
-        };
-    });
+    return {
+        getIP: function () {
+            var requestUrl = 'http://freegeoip.net/json/';
+            var deferred = $q.defer();
+            var config = {
+                url: requestUrl,
+                headers: {'Content-Type': 'application/json'}
+            };
+            $http(config)
+                .then(function (result) {
+                    deferred.resolve(result);
+                }, function () {
+                    deferred.reject('getIPService error');
+                });
+            return deferred.promise;
+        }
+    };
+});
 
 
 /**
@@ -235,7 +229,6 @@ app.service('updateRestangularHeaders', function (Restangular, ecmsSession) {
 });
 
 
-
 /**
  * Takes data from the server and puts it in this format:
  * [ {fieldName1: value1 , fieldName2: value2, fieldName3: value3, ... }, { ... }, { ... } ]
@@ -243,7 +236,7 @@ app.service('updateRestangularHeaders', function (Restangular, ecmsSession) {
  * The index property is to be used for Prev/Next logic
  * @param dataIn
  */
-app.service('tailorData', function($rootScope) {
+app.service('tailorData', function ($rootScope) {
     this.data = function (dataIn) {
         var returnObject = [];
         for (var i in dataIn) {
@@ -268,13 +261,11 @@ app.service('tailorData', function($rootScope) {
 });
 
 
-
-
 /*****************************************
  * SIGN OUT
  *****************************************/
-app.service('signout', function($rootScope, $sessionStorage, terminate, $state, toggleFeatures) {
-    this.out =function()  {
+app.service('signout', function ($rootScope, $sessionStorage, terminate, $state, toggleFeatures) {
+    this.out = function () {
         $rootScope.loginError = false;
         $rootScope.userLoggedIn = false;
         $sessionStorage.userLoggedIn = false;
@@ -294,9 +285,9 @@ app.service('signout', function($rootScope, $sessionStorage, terminate, $state, 
 ///**
 // * All to default state
 // */
-app.service('toDefaultState', function($rootScope, gridOptions) {
+app.service('toDefaultState', function ($rootScope, gridOptions) {
     return {
-        setToDefaultState: function() {
+        setToDefaultState: function () {
             $rootScope.state = {
                 showActionBar: false,
                 showNavBar: false,
@@ -354,10 +345,10 @@ app.service('spinner', function ($rootScope) {
 /**
  * Clears search results from current state- This should be in the search controller
  */
-app.service('clearSearchResults', function($rootScope) {
-    this.clear = function() {
+app.service('clearSearchResults', function ($rootScope) {
+    this.clear = function () {
         $rootScope.state.searchResults = [];
-    }
+    };
 });
 
 

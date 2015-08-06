@@ -27,7 +27,7 @@ angular.module('ecmsEcmsUiApp', [
         function ($stateProvider, $urlRouterProvider, RestangularProvider) {
 
             // Restangular initial configs
-            RestangularProvider.setBaseUrl('/ecms/rest/v1/');
+            RestangularProvider.setBaseUrl('/ecms/rest/');
             RestangularProvider.setFullResponse(true);
             RestangularProvider.setDefaultHeaders({
                 'Content-Type': 'application/json'
