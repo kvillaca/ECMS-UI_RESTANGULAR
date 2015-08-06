@@ -19,6 +19,7 @@ angular.module('ecmsEcmsUiApp')
                                              tailorData,
                                              $timeout,
                                              Restangular,
+                                             clearSearchResults,
                                              RESTAPIversion,
                                              spinner) {
 
@@ -35,7 +36,7 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.errorBox = null;
             $scope.clearDocument();
             if ($rootScope.state.currentView === 'search.input') {
-                $scope.clearSearchResults();
+                clearSearchResults.clear();
             }
             $rootScope.$broadcast('updateSearchInputHeight');
         };
@@ -87,14 +88,14 @@ angular.module('ecmsEcmsUiApp')
                         goTo.go('search.results');
                     } else {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
-                        $scope.clearSearchResults();
+                        clearSearchResults.clear();
                         goTo.go('search.input');       // probably temporary
                     }
                     spinner.off();
                 }, function (fail) {
                     $timeout(function () {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
-                        $scope.clearSearchResults();
+                        clearSearchResults.clear();
                         goTo.go('search.input');       // probably temporary
                         //console.log(fail);
                         spinner.off();

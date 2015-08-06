@@ -97,22 +97,6 @@ app.service('redirect', function ($rootScope, goTo, updateDocumentInfo, $window)
 });
 
 
-app.service('updateDocumentInfo', function ($rootScope) {
-    this.update = function (id) {
-        $rootScope.state.currentDocument.id = id;
-        for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
-            var row = $rootScope.state.searchResults [i];
-            if (row.documentid === id) {
-                $rootScope.state.currentDocument.index = row.searchResultIndex;
-                $rootScope.state.currentDocument.indexOnPage = (i + 1);
-                $rootScope.$broadcast('updateCurrentDocument');
-                break;
-            }
-        }
-        //return scope;
-    };
-});
-
 
 /**
  * Go to new view
@@ -136,6 +120,24 @@ app.service('goTo', function ($rootScope, $state) {
         $rootScope.$broadcast('updateNavbar');
     };
 });
+
+
+app.service('updateDocumentInfo', function ($rootScope) {
+    this.update = function (id) {
+        $rootScope.state.currentDocument.id = id;
+        for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
+            var row = $rootScope.state.searchResults [i];
+            if (row.documentid === id) {
+                $rootScope.state.currentDocument.index = row.searchResultIndex;
+                $rootScope.state.currentDocument.indexOnPage = (i + 1);
+                $rootScope.$broadcast('updateCurrentDocument');
+                break;
+            }
+        }
+        //return scope;
+    };
+});
+
 
 
 /**
@@ -264,8 +266,10 @@ app.service('tailorData', function ($rootScope) {
 /*****************************************
  * SIGN OUT
  *****************************************/
-app.service('signout', function ($rootScope, $sessionStorage, terminate, $state, toggleFeatures) {
+app.service('signout', function ($rootScope, $sessionStorage, terminate, $state, toggleFeatures, toDefaultState, updateSession) {
     this.out = function () {
+        toDefaultState.setToDefaultState();
+        updateSession.session($rootScope.state);
         $rootScope.loginError = false;
         $rootScope.userLoggedIn = false;
         $sessionStorage.userLoggedIn = false;

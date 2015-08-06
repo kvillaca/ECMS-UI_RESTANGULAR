@@ -32,34 +32,6 @@ angular.module('ecmsEcmsUiApp', [
             RestangularProvider.setDefaultHeaders({
                 'Content-Type': 'application/json'
             });
-            //RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
-            //    var extractedData;
-            //    if (operation === "getList") {
-            //        // We definitelly need a better approach to the amount of data been send at once via rest!!!!!
-            //        if (_.has(data, 'DocumentSearch')) {
-            //            extractedData = data.DocumentSearch;
-            //
-            //            if (_.has(data.DocumentSearch, 'SearchHit')) {
-            //                extractedData.SearchHit = data.DocumentSearch.SearchHit;
-            //            }
-            //
-            //            if (_.has(data.DocumentSearch, 'TotalHits')) {
-            //                extractedData.TotalHits = data.DocumentSearch.TotalHits;
-            //            }
-            //
-            //            if (_.has(data.DocumentSearch, 'Links')) {
-            //                extractedData.Links = data.DocumentSearch.Links;
-            //            }
-            //
-            //            if (_.has(data.DocumentSearch, 'FacetField')) {
-            //                extractedData.FacetField = data.DocumentSearch.FacetField;
-            //            }
-            //        }
-            //    } else {
-            //        extractedData = data;
-            //    }
-            //    return extractedData;
-            //});
 
 
 
