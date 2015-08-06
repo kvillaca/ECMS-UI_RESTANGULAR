@@ -90,7 +90,6 @@ angular.module('ecmsEcmsUiApp')
 
 
         $scope.initView = function() {
-            $scope.updateGridOptions();
             if ($rootScope.state.searchResults) {
                 $scope.updateGridOptions();
             }

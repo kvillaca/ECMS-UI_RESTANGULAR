@@ -122,9 +122,10 @@ app.service('updateDocumentInfo', function($rootScope) {
  * Go to new view
  *
  */
-app.service('goTo', function($state) {
+app.service('goTo', function($rootScope, $state) {
     this.go = function (newView, options, scopeStateCurrentDocumentId) {
         //toggleFeatures.toggle(newView);
+        $rootScope.state.currentView = newView;
         if (options) {
             $state.go(newView, options);
         }
