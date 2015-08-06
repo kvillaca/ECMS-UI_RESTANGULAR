@@ -29,9 +29,9 @@ angular.module('ecmsEcmsUiApp', [
             // Restangular initial configs
             RestangularProvider.setBaseUrl('/ecms/rest/');
             RestangularProvider.setFullResponse(true);
-
-            // SetDefaultHeader doesn't working in here due ecmsSession hasn't been defined when the interpreter reaches this line
-            //RestangularProvider.setDefaultHeaders({ 'X-ECMS-Session': ecmsSession.getSession(), 'Content-Type': 'application/json' });
+            RestangularProvider.setDefaultHeaders({
+                'Content-Type': 'application/json'
+            });
             //RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
             //    var extractedData;
             //    if (operation === "getList") {

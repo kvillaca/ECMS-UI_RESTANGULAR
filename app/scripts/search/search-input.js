@@ -14,10 +14,11 @@ angular.module('ecmsEcmsUiApp')
                                              updateSession,
                                              getSearchResultsService,
                                              goTo,
-                                             makeParams,
+                                             paramsToString,
                                              tailorData,
                                              $timeout,
-                                             Restangular ) {
+                                             Restangular,
+                                             spinner) {
 
         /**
          *
@@ -67,16 +68,16 @@ angular.module('ecmsEcmsUiApp')
                 query: $rootScope.state.searchQuery
             };
 
-            $scope.spinnerOn();
+            spinner.on();
 
             Restangular.setDefaultHeaders({
                 'X-ECMS-Session': ecmsSession.getSession(),
                 'Content-Type': 'application/json'
             });
-            Restangular.all('v1/documents?' + makeParams.paramList(paramsValue)).
+            Restangular.all('v1/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
-                    $scope.spinnerOff();
+                    spinner.off();
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
                     $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
                     if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
@@ -89,19 +90,18 @@ angular.module('ecmsEcmsUiApp')
                         $scope.clearSearchResults();
                         goTo.go('search.input');       // probably temporary
                     }
-                    $scope.spinnerOff();
+                    spinner.off();
                 }, function (fail) {
                     $timeout(function () {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
                         $scope.clearSearchResults();
                         goTo.go('search.input');       // probably temporary
                         console.log(fail);
-                        $scope.spinnerOff();
+                        spinner.off();
                     });
                 });
             //}
         };
-
 
 
     });

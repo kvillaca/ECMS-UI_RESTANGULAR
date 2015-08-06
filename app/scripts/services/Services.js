@@ -22,10 +22,14 @@ app.service('updateSession', function($sessionStorage){
 /**
  * Terminate
  */
-app.service('terminate', function($rootScope, $sessionStorage) {
+app.service('terminate', function($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders) {
     return function() {
         $rootScope.sessionKey = null;
         delete $sessionStorage.session;
+
+        ecmsSession.set(null, false);
+        updateRestangularHeaders.removeSessionId();
+
     };
 });
 
@@ -208,18 +212,25 @@ app.service('getIPService', function ($http, $q) {
 
 
 /**
- * @param input
+ * @ngdoc function
+ * @name ecmsEcmsUiApp.service:updateRestangularHeaders
+ * @description updates headers in Restangular
  */
-app.service('makeParams', function() {
-    this.paramList = function (paramsValue) {
-        var params = '';
-        for (var i in paramsValue) {
-            params += i + '=' + paramsValue[i] + '&';
+app.service('updateRestangularHeaders', function (Restangular, ecmsSession) {
+    return {
+        addSessionId: function () {
+            Restangular.setDefaultHeaders({
+                'Content-Type': 'application/json',
+                'X-ECMS-Session': ecmsSession.getSession()
+            });
+        },
+        removeSessionId: function () {
+            Restangular.setDefaultHeaders({
+                'Content-Type': 'application/json'
+            });
         }
-        params = params.substring(0, params.length - 1);    // remove last &
-        return params;
     };
-})
+});
 
 
 
@@ -300,6 +311,39 @@ app.service('toDefaultState', function($rootScope, gridOptions) {
                 rawXML: null,
                 dirtyRawXML: false
             };
+        }
+    };
+});
+/**
+ * @ngdoc function
+ * @name ecmsEcmsUiApp.service:updateRestangularHeaders
+ * @description updates headers in Restangular
+ */
+app.service('paramsToString', function () {
+    return {
+        implode: function (object) {
+            var params = '';
+            for (var paramName in object) {
+                params += paramName + '=' + object[paramName] + '&';
+            }
+            params = params.substring(0, params.length - 1);    // remove last &
+            return params;
+        }
+    };
+});
+
+/**
+ * @ngdoc function
+ * @name ecmsEcmsUiApp.service:spinner
+ * @description toggles the loading spinner on and off
+ */
+app.service('spinner', function ($rootScope) {
+    return {
+        on: function () {
+            $rootScope.loading = true;
+        },
+        off: function () {
+            $rootScope.loading = false;
         }
     };
 });

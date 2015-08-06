@@ -7,7 +7,13 @@
  */
 
 angular.module('ecmsEcmsUiApp')
-    .service('updateDocumentService', function ($rootScope, $http, $q, saveDocumentEndpoint, validateEndpoint, ecmsSession) {
+    .service('updateDocumentService', function ($rootScope,
+                                                $http,
+                                                $q,
+                                                saveDocumentEndpoint,
+                                                validateEndpoint,
+                                                ecmsSession,
+                                                paramsToString) {
 
 
         function validateErrorBase(error) {

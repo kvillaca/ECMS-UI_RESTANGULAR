@@ -16,6 +16,7 @@ angular.module('ecmsEcmsUiApp')
                                      $window,
                                      $timeout,
                                      goTo,
+                                     spinner,
                                      updateDocumentService) {
 
         var $this = this;   // alias for this controller
@@ -198,7 +199,7 @@ angular.module('ecmsEcmsUiApp')
             indexToFind = direction === 'next' ? $rootScope.state.currentDocument.index + 1 : $rootScope.state.currentDocument.index - 1;
 
             // in transition
-            $scope.spinnerOn();
+            spinner.on();
 
             // page over for next
             if (indexToFind > $rootScope.state.indexRange [1]) {
@@ -230,7 +231,7 @@ angular.module('ecmsEcmsUiApp')
             }
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
         };
 
         // Finds the doc id that we're trying to go to
@@ -266,7 +267,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.alerts = response.userMessage;
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
 
             $scope.document = response.data;
             $rootScope.state.rawXML = $scope.document.Document.Body.value;
@@ -302,7 +303,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.status = 'Error';
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
 
             console.log(error);
         }
@@ -325,7 +326,7 @@ angular.module('ecmsEcmsUiApp')
 
         // subscription event listening for a click on the action bar in header
         $rootScope.$on('updateDocument', function () {
-            $scope.spinnerOn();
+            spinner.on();
             $scope.updateDocument();
         });
 
@@ -337,7 +338,7 @@ angular.module('ecmsEcmsUiApp')
         function validateSuccess(response) {
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
 
             // flag for user feedback message
             $scope.statusAlert.statusClass = 'alert-success';
@@ -353,7 +354,7 @@ angular.module('ecmsEcmsUiApp')
             console.log(error);
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
 
             $scope.statusAlert.statusClass = 'alert-danger alert-dismissible';
             $scope.statusAlert.alerts = error.userMessage;
@@ -378,7 +379,7 @@ angular.module('ecmsEcmsUiApp')
 
         // subscription event listening for a click on the action bar in header
         $rootScope.$on('validateDocument', function () {
-            $scope.spinnerOn();
+            spinner.on();
             $scope.validateDocument();
         });
 
@@ -391,7 +392,7 @@ angular.module('ecmsEcmsUiApp')
             getDocumentSuccess(result);
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
 
             // flag for user feedback message
             $scope.statusAlert.statusClass = 'alert-success';
@@ -406,7 +407,7 @@ angular.module('ecmsEcmsUiApp')
         function reloadDocumentError(error) {
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
 
             $scope.statusAlert.statusClass = 'alert-danger alert-dismissible';
             $scope.statusAlert.alerts = ['There was an error in reloading your file. Please try again or contact system administrator if you can\'t reload the file'];
@@ -428,7 +429,7 @@ angular.module('ecmsEcmsUiApp')
 
         // subscription event listening for a click on the action bar in header
         $rootScope.$on('reloadDocument', function () {
-            $scope.spinnerOn();
+            spinner.on();
             $scope.reloadDocument();
         });
 
@@ -444,7 +445,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.alerts = response.userMessage;
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.on();
 
             // update search results grid
             $scope.updateSearchResults ();
@@ -464,7 +465,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.status = 'Error';
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.on();
         }
 
         // on closing a document, this checks if the editor has been touched
@@ -505,7 +506,7 @@ angular.module('ecmsEcmsUiApp')
                 // Modal OK
 
                 // in transition
-                $scope.spinnerOn();
+                spinner.on();
 
                 if (callbackLabel === 'close') {
                     updateDocumentService.close($scope.document)
@@ -552,7 +553,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.alerts = response.userMessage;
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
 
             // update search results grid
             $scope.updateSearchResults ();
@@ -572,7 +573,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.status = 'Error';
 
             // transition complete
-            $scope.spinnerOff();
+            spinner.off();
         }
 
 

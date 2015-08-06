@@ -26,11 +26,11 @@ angular.module('ecmsEcmsUiApp')
                                       $timeout,
                                       terminate,
                                       Restangular,
+                                      paramsToString,
                                       signout,
                                       getIPService) {
 
         var mainScope = this;   // alias for this controller
-
 
         // Scope defaults
         $rootScope.loginError = false;
@@ -88,22 +88,12 @@ angular.module('ecmsEcmsUiApp')
             .then(ipSuccess, ipError);
 
 
-        /****************************************
-         * TRANSITION SPINNER
-         ***************************************/
-
-            // hide spinner initially
-        $scope.loading = false;
-
-        $scope.spinnerOn = function () {
-            $scope.loading = true;
-        };
-
-        $scope.spinnerOff = function () {
-            $scope.loading = false;
-        };
+        spinner.off();
 
 
+        /***********************************************
+         * STATE
+         ***********************************************/
 
         /**
          * Clears document from current state- This should be in the doc controller
