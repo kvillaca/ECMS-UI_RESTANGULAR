@@ -86,7 +86,7 @@ angular.module('ecmsEcmsUiApp')
                     if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
                         $rootScope.state.searchResults = tailorData.data($rootScope.state.searchResults);
                         $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
-                        //$rootScope.$broadcast('resizeGrid');
+                        $rootScope.$broadcast('resizeGrid');
                         goTo.go('search.results');
                     } else {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
@@ -99,7 +99,7 @@ angular.module('ecmsEcmsUiApp')
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
                         $scope.clearSearchResults();
                         goTo.go('search.input');       // probably temporary
-                        console.log(fail);
+                        //console.log(fail);
                         spinner.off();
                     });
                 });
