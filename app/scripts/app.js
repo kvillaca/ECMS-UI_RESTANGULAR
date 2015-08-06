@@ -130,7 +130,7 @@ angular.module('ecmsEcmsUiApp', [
                     }
                 });
         }])
-    .run(function ($rootScope,$location, $state, isPrivateService, terminate, getIPService, Restangular, $sessionStorage, gridOptions) {
+    .run(function ($rootScope,$location, $state, isPrivateService, terminate, getIPService, Restangular, signout, $sessionStorage, gridOptions) {
         // Root variables, mean module public variables.
         var OK_RESPONSE = 200;
 
@@ -159,7 +159,8 @@ angular.module('ecmsEcmsUiApp', [
                 pageSizes: gridOptions.pageSizes,
                 totalItems: null,
                 rawXML: null,
-                dirtyRawXML: false
+                dirtyRawXML: false,
+                tab: 'fielded'
             };
 
         /*
@@ -194,7 +195,7 @@ angular.module('ecmsEcmsUiApp', [
             // sign user out if they are headed for login view
             if (toState.name === 'login') {
                 terminate();
-                $rootScope.$broadcast('signout');
+                signout.out();
             }
 
             // force login if page is private

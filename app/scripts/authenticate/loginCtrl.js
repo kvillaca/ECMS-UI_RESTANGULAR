@@ -15,7 +15,6 @@ angular.module('ecmsEcmsUiApp')
                                              $sessionStorage,
                                              ecmsSession,
                                              goTo,
-                                             toggleFeatures,
                                              Restangular,
                                              RESTAPIversion,
                                              updateRestangularHeaders,
@@ -67,11 +66,11 @@ angular.module('ecmsEcmsUiApp')
             Restangular.one(RESTAPIversion).post('authenticate', angular.toJson(jsonInput, true)).
                 then(function (response) {
                     $timeout(function () {
-                        $this.sessionKey = response.data.UserLoginEvent.SessionKey;
+                        $this.sessionKey = response.data.UserLoginEvent.SessionKey;console.log(' session key ' + $this.sessionKey);
                         $sessionStorage.$default({session: null});
                         ecmsSession.set($this.sessionKey, true);
                         // update headers for the rest of the app because all rest calls from now on will need auth info
-                        updateRestangularHeaders.addSessionId();
+                        updateRestangularHeaders.addSessionId($this.sessionKey);
                         $rootScope.loginError = false;
                         $rootScope.userLoggedIn = true;
                         $rootScope.credentials = {
@@ -84,7 +83,7 @@ angular.module('ecmsEcmsUiApp')
                             password: undefined,
                             rememberMe: false
                         };
-                        goTo.go('search.input');
+                        goTo.to('search.input');
                     });
                 }, function (fail) {
                     $timeout(function () {

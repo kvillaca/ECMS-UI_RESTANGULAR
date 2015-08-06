@@ -75,8 +75,7 @@ angular.module('ecmsEcmsUiApp')
             spinner.on();
 
             Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
-                customGET('DocumentSearch').
-                then(function (resp) {
+                getList().then(function (resp) {
                     spinner.off();
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
                     $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
@@ -96,7 +95,7 @@ angular.module('ecmsEcmsUiApp')
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
                         $scope.clearSearchResults();
                         goTo.go('search.input');       // probably temporary
-                        //console.log(fail);
+                        console.log(fail);
                         spinner.off();
                     });
                 });
