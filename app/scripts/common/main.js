@@ -28,10 +28,11 @@ angular.module('ecmsEcmsUiApp')
                                       terminate,
                                       Restangular,
                                       paramsToString,
+                                      spinner,
                                       signout,
                                       getIPService) {
 
-        var mainScope = this;   // alias for this controller
+        //var mainScope = this;   // alias for this controller
 
         // Scope defaults
         $rootScope.loginError = false;
