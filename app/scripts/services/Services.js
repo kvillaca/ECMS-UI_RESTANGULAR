@@ -350,4 +350,13 @@ app.service('spinner', function ($rootScope) {
 });
 
 
+/**
+ * Clears search results from current state- This should be in the search controller
+ */
+app.service('clearSearchResults', function($rootScope) {
+    this.clear = function() {
+        $rootScope.state.searchResults = [];
+    }
+});
+
 

@@ -15,7 +15,7 @@
                          ng-show="queryForm.searchQueryInput.$invalid"
                          ng-hide="queryForm.searchQueryInput.$valid">Minimum of 3 (three) chars needed to make a search.</div>
                     <div class="pull-right text-center">
-                        <button class="btn btn-default" type="submit">
+                        <button class="btn btn-default" ng-disabled="queryForm.searchQueryInput.$invalid" type="submit">
                             <span class="uxf-icon uxf-search" aria-hidden="true"></span> Search
                         </button>
                         <br />

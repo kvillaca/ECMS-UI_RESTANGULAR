@@ -29,6 +29,7 @@ angular.module('ecmsEcmsUiApp')
                                       paramsToString,
                                       spinner,
                                       signout,
+                                      clearSearchResults,
                                       getIPService) {
 
         //var mainScope = this;   // alias for this controller
@@ -81,14 +82,6 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.rawXML = null;
             $rootScope.state.dirtyRawXML = false;
             $scope.codeMirrorArea = null;
-        };
-
-
-        /**
-         * Clears search results from current state- This should be in the search controller
-         */
-        $scope.clearSearchResults = function () {
-            $rootScope.state.searchResults = [];
         };
 
 
@@ -155,63 +148,6 @@ angular.module('ecmsEcmsUiApp')
          * SEARCH QUERY
          **********************************************/
 
-        /**
-         * Submits the search query
-         * @param input
-         */
-
-        ///**
-        // * @TODO - move to Search controller
-        // * @param input
-        // */
-        //$scope.submitQuery = function (input) {
-        //
-        //    $rootScope.state.errorMessage = '';
-        //    $rootScope.state.pageNumber = 1;
-        //    $scope.clearDocument();
-        //
-        //    var paramsValue = {
-        //        limit: $rootScope.state.pageSize,
-        //        offset: ($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize,
-        //        query: $rootScope.state.searchQuery
-        //    };
-        //
-        //    $scope.spinnerOn();
-        //
-        //    Restangular.setDefaultHeaders({
-        //        'X-ECMS-Session': ecmsSession.getSession(),
-        //        'Content-Type': 'application/json'
-        //    });
-        //    Restangular.all('v1/documents?' + makeParams.paramList(paramsValue)).
-        //        customGET('DocumentSearch').
-        //        then(function (resp) {
-        //            $scope.spinnerOff();
-        //            $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
-        //            $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
-        //            if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
-        //                $rootScope.state.searchResults = mainScope.tailorData($rootScope.state.searchResults);
-        //                $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
-        //                //$rootScope.$broadcast('resizeGrid');
-        //                goTo.go('search.results');
-        //            } else {
-        //                $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
-        //                $scope.clearSearchResults();
-        //                goTo.go('search.input');       // probably temporary
-        //            }
-        //            $scope.spinnerOff();
-        //        }, function (fail) {
-        //            $timeout(function () {
-        //                $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
-        //                $scope.clearSearchResults();
-        //                $scope.goTo('search.input');       // probably temporary
-        //                console.log(fail);
-        //                $scope.spinnerOff();
-        //            });
-        //        });
-        //    //}
-        //};
-
-
 
         /**
          * Grabs a fresh set of search results from the backend
@@ -238,7 +174,7 @@ angular.module('ecmsEcmsUiApp')
                 }
                 else {
                     $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
-                    $scope.clearSearchResults();
+                    clearSearchResults.clear();
                     deferred.reject('updateSearchResults error');
                 }
             }
@@ -246,7 +182,7 @@ angular.module('ecmsEcmsUiApp')
             function getSearchResultsError(error) {
                 // error!
                 $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
-                $scope.clearSearchResults();
+                clearSearchResults.clear();
                 console.log(error);
                 deferred.reject(error);
             }
