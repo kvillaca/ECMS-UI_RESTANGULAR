@@ -1,16 +1,18 @@
 <div ng-include="search-input.html"></div>
-<div ng-init="initView()" ng-if="state.searchResults.length">
-    <h5 class="gray"><strong>My results:</strong> {{(state.pageNumber - 1) * state.pageSize + 1}} - {{lastIndex()}} of {{state.totalItems}}</h5>
 
-    <div ng-show="false"><!-- ng-show="!visibleView.doc && visibleView.input" -->
-        <div class="alert alert-danger" ng-show="state.errorMessage" ng-bind="state.errorMessage">{{state.errorMessage}}</div>
+<div ng-init="initView()" >
+    <div ng-if="$root.state.searchResults.length">
+        <h5 class="gray"><strong>My results:</strong> {{(state.pageNumber - 1) * state.pageSize + 1}} - {{lastIndex()}} of {{state.totalItems}}</h5>
+        <div ng-show="false"><!-- ng-show="!visibleView.doc && visibleView.input" -->
+            <div class="alert alert-danger" ng-show="state.errorMessage" ng-bind="state.errorMessage">{{state.errorMessage}}</div>
+        </div>
+        <!--<div class="btn-group" role="group" aria-label="..." style="margin-bottom: 5px;">
+            <button type="button" class="btn btn-default" ng-click="selectAll($event)">Select All</button>
+            <button type="button" class="btn btn-default" ng-click="clearAll($event)">Select None</button>
+            <button type="button" class="btn btn-default" ng-disabled="totalSelected === 0">Edit Selected</button>
+        </div>
+        <div class="pull-right">Total selected: {{totalSelected}}</div>-->
+        <div class="gridStyle" ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-resize-columns
+             ui-grid-auto-resize></div>
     </div>
-    <!--<div class="btn-group" role="group" aria-label="..." style="margin-bottom: 5px;">
-        <button type="button" class="btn btn-default" ng-click="selectAll($event)">Select All</button>
-        <button type="button" class="btn btn-default" ng-click="clearAll($event)">Select None</button>
-        <button type="button" class="btn btn-default" ng-disabled="totalSelected === 0">Edit Selected</button>
-    </div>
-    <div class="pull-right">Total selected: {{totalSelected}}</div>-->
-    <div class="gridStyle" ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-resize-columns
-         ui-grid-auto-resize></div>
 </div>

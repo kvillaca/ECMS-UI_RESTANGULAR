@@ -91,6 +91,7 @@ angular.module('ecmsEcmsUiApp')
 
         $scope.initView = function() {
             $scope.updateGridOptions();
+            //console.log('$rootScope.state.searchResults ' + $rootScope.state.searchResults);
             if ($rootScope.state.searchResults) {
                 $scope.updateGridOptions();
             }
@@ -111,7 +112,6 @@ angular.module('ecmsEcmsUiApp')
 
         // selects all rows in grid
         $scope.selectAll = function(e) {
-
             if (e) {
                 // blur the button we just clicked
                 blur(e);
@@ -181,6 +181,9 @@ angular.module('ecmsEcmsUiApp')
             $scope.gridOptions.paginationCurrentPage = $rootScope.state.pageNumber;
             $scope.gridOptions.totalItems = $rootScope.state.totalItems;
 
+            //console.log("GridOptions");
+            //console.log($scope.gridOptions);
+
             // select again any rows that were selected before
             if ($scope.gridApi) {
 
@@ -203,11 +206,12 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-        //$rootScope.$on('resizeGrid', function () {
-        //    if ($rootScope.state.searchResults) {
-        //        $scope.updateGridOptions();
-        //    }
-        //});
+        $rootScope.$on('resizeGrid', function () {
+            if ($rootScope.state.searchResults) {
+                //$scope.updateGridOptions();
+                $scope.initView();
+            }
+        });
 
         //if ($rootScope.state.searchResults) {
         //    $scope.updateGridOptions();

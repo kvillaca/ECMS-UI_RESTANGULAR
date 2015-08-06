@@ -23,6 +23,7 @@ angular.module('ecmsEcmsUiApp')
                                       searchErrorService,
                                       goTo,
                                       $q,
+                                      spinner,
                                       $timeout,
                                       terminate,
                                       Restangular,
@@ -41,29 +42,6 @@ angular.module('ecmsEcmsUiApp')
             rememberMe: false
         };
         $rootScope.codeMirrorArea = null;
-
-
-        ///**
-        // * All to default state
-        // */
-        //$scope.toDefaultState = function () {
-        //    $rootScope.state = {
-        //        showActionBar: false,
-        //        showNavBar: false,
-        //        currentView: 'login',
-        //        currentDocument: {},
-        //        errorBox: null,
-        //        errorMessage: null,
-        //        searchQuery: null,
-        //        searchResults: [],
-        //        pageNumber: 1,
-        //        pageSize: gridOptions.pageSize,
-        //        pageSizes: gridOptions.pageSizes,
-        //        totalItems: null,
-        //        rawXML: null,
-        //        dirtyRawXML: false
-        //    };
-        //};
 
 
         /*****************************************
@@ -279,53 +257,10 @@ angular.module('ecmsEcmsUiApp')
             return deferred.promise;
         };
 
-        /**
-         * Checks if the user typed valid input
-         * This is where a REST API will be plugged in to make any checks.
-         * For now, just check if input is not an empty string and at least 3 chars long
-         * @param input
-         * @returns {*}
-         *
-         * Plase check the search-input.html fragment to see how to validate min and max length and siplay messages!
-         *
-         */
-        //mainScope.isValidInput = function (input) {
-        //
-        //    if (!input || input.trim().length < 3) {
-        //        return {error: searchErrorService.getErrorMessage('shortSearchQuery')};
-        //    }
-        //    else {
-        //        /**
-        //         * Here we need real API validation
-        //         */
-        //        return true;
-        //    }
-        //};
 
-
-        ///*****************************************
-        // * SIGN OUT
-        // *****************************************/
-        //$scope.signOut = function () {
-        //    $rootScope.loginError = false;
-        //    $rootScope.userLoggedIn = false;
-        //    $sessionStorage.userLoggedIn = false;
-        //    terminate();
-        //    $rootScope.credentials = {
-        //        username: null,
-        //        password: null,
-        //        rememberMe: false
-        //    };
-        //    $state.go('login');
-        //    toggleFeatures.toggle('login');
-        //};
-        //
         $rootScope.$on('signout', function () {
             toDefaultState.setToDefaultState();
             updateSession.session($rootScope.state);
             signout.out();
         });
-
-
-
     });
