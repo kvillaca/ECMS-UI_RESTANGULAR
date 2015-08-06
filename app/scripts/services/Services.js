@@ -262,7 +262,7 @@ app.service('tailorData', function($rootScope) {
             returnObject.push(thisRow);
         }
         return returnObject;
-    }
+    };
 });
 
 
@@ -284,7 +284,7 @@ app.service('signout', function($rootScope, $sessionStorage, terminate, $state, 
         };
         //$state.go('login');
         toggleFeatures.toggle('login');
-    }
+    };
 
 });
 

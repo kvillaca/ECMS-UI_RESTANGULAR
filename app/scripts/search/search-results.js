@@ -14,7 +14,7 @@ angular.module('ecmsEcmsUiApp')
 
         // Declaring all variables
         // alias for this controller
-        var $this = this;
+        //var $this = this;
         // template for grid cell with popover tooltip and anchor
         var templateWithTooltip = 'templates/cellWithTooltip.html';
         // template for grid cell with popover tooltip, no anchor
@@ -23,7 +23,7 @@ angular.module('ecmsEcmsUiApp')
         var templatePlain = 'templates/cell.html';
 
 
-        $scope.searchQueryInput;
+        $scope.searchQueryInput = '';
         $scope.searchResults = undefined;
         $scope.pageSize = undefined;
         $scope.pageSizes = undefined;
@@ -94,7 +94,7 @@ angular.module('ecmsEcmsUiApp')
             if ($rootScope.state.searchResults) {
                 $scope.updateGridOptions();
             }
-        }
+        };
 
 
 

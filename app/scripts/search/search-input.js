@@ -13,6 +13,7 @@ angular.module('ecmsEcmsUiApp')
                                              ecmsSession,
                                              updateSession,
                                              getSearchResultsService,
+                                             searchErrorService,
                                              goTo,
                                              paramsToString,
                                              tailorData,
@@ -61,6 +62,8 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.errorMessage = '';
             $rootScope.state.pageNumber = 1;
             $scope.clearDocument();
+
+            $rootScope.state.searchQuery = input;
 
             var paramsValue = {
                 limit: $rootScope.state.pageSize,
