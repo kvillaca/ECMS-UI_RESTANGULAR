@@ -74,11 +74,7 @@ angular.module('ecmsEcmsUiApp')
 
             spinner.on();
 
-            Restangular.setDefaultHeaders({
-                'X-ECMS-Session': ecmsSession.getSession(),
-                'Content-Type': 'application/json'
-            });
-            Restangular.all('v1/documents?' + paramsToString.implode(paramsValue)).
+            Restangular.all('documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
                     spinner.off();

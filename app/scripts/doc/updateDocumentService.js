@@ -13,6 +13,7 @@ angular.module('ecmsEcmsUiApp')
                                                 saveDocumentEndpoint,
                                                 validateEndpoint,
                                                 ecmsSession,
+                                                Restangular,
                                                 paramsToString) {
 
 
@@ -49,15 +50,8 @@ angular.module('ecmsEcmsUiApp')
         return {
             // updates existing document. Also validates XML and some other properties not including indexing.
             update: function (request) {
-                var requestUrl = saveDocumentEndpoint.endpoint + '/' + encodeURIComponent(request.Document.DocumentId);
-                var deferred = $q.defer();
 
-                var config = {
-                    url: requestUrl,
-                    method: saveDocumentEndpoint.method,
-                    headers: { 'X-ECMS-Session': ecmsSession.getSession(), 'Content-Type' : 'application/json'},
-                    data: request
-                };
+                var deferred = $q.defer();
 
                 function updateSuccess (result) {
                     result.userMessage = new Array ('Document saved.');
@@ -75,7 +69,9 @@ angular.module('ecmsEcmsUiApp')
                 function validateSuccess () {
 
                     // now Update
-                    $http(config).then(updateSuccess, updateError);
+                    //$http(config).then(updateSuccess, updateError);
+                    Restangular.one('documents', request.Document.DocumentId).customPUT(request)
+                        .then(updateSuccess, updateError);
                 }
 
                 function validateError (error) {
@@ -93,15 +89,7 @@ angular.module('ecmsEcmsUiApp')
             // validate whole document
             validate: function (request) {
 
-                var requestUrl = validateEndpoint.endpoint;
                 var deferred = $q.defer();
-
-                var config = {
-                    url: requestUrl,
-                    method: validateEndpoint.method,
-                    headers: { 'X-ECMS-Session': ecmsSession.getSession(), 'Content-Type' : 'application/json'},
-                    data: request
-                };
 
                 function validateSuccess (result) {
 
@@ -115,11 +103,13 @@ angular.module('ecmsEcmsUiApp')
                     deferred.reject(validateErrorBase(error));
                 }
 
-                $http(config)
+                Restangular.post ('methods/document/validate', request)
                     .then(validateSuccess, validateError);
 
                 return deferred.promise;
+
             },
+            // used for Save and Exit
             close: function (request) {
 
                 var deferred = $q.defer();
@@ -139,17 +129,11 @@ angular.module('ecmsEcmsUiApp')
 
                 function validateSuccess () {
 
-                    var requestUrl = saveDocumentEndpoint.endpoint + '/' + encodeURIComponent(request.Document.DocumentId);
-
-                    var config = {
-                        url: requestUrl,
-                        method: saveDocumentEndpoint.method,
-                        headers: { 'X-ECMS-Session': ecmsSession.getSession(), 'Content-Type' : 'application/json'},
-                        data: request
-                    };
-
                     // now Update
-                    $http(config).then(updateSuccess, updateError);
+                    //$http(config).then(updateSuccess, updateError);
+                    Restangular.one('documents', request.Document.DocumentId).customPUT(request)
+                        .then(updateSuccess, updateError);
+
                 }
 
                 function validateError (error) {

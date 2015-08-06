@@ -81,18 +81,18 @@ app.service('redirect', function($rootScope, goTo, updateDocumentInfo, $window) 
         switch (toState.name) {
             case 'search.input':
             case 'search':
-                goTo.go('search.input');
+                goTo.go(toState.name);
                 break;
             case 'search.results':
                 if (!fromState.name || fromState.name === 'search.results') {
                     goTo.go('search.input');
                 } else {
-                    goTo.go('search.results');
+                    goTo.go(toState.name);
                 }
                 break;
             case 'search.doc':
                 updateDocumentInfo(toParams.id);
-                goTo.go('search.doc', {id: toParams.id});
+                goTo.go(toState.name, {id: toParams.id});
                 angular.element($window).scrollTop (0);
                 break;
         }

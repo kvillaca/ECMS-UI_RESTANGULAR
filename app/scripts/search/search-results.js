@@ -57,14 +57,14 @@ angular.module('ecmsEcmsUiApp')
             primaryKey: 'documentId',
             rowHeight: 30,
             columnDefs: [
-                {field: 'dtype', displayName: 'Doc Type', cellTemplate: templateJournalTitleWithTooltip, maxWidth: 150, enableColumnMenu: false, enableSorting: false},   // enableSorting: false, enableHiding: false, enableColumnMenu: false, suppressRemoveSort: true, sort: { direction: uiGridConstants.ASC }
+                {field: 'dtype', displayName: 'Doc Type', cellTemplate: templateJournalTitleWithTooltip, minWidth: 50, maxWidth: 150, enableColumnMenu: false, enableSorting: false},   // enableSorting: false, enableHiding: false, enableColumnMenu: false, suppressRemoveSort: true, sort: { direction: uiGridConstants.ASC }
                 {field: 'ti', displayName: 'Document Title', cellTemplate: templateWithTooltip, minWidth: 300, enableColumnMenu: false, enableSorting: false},
                 {field: 'pub', displayName: 'Journal Title', cellTemplate: templateJournalTitleWithTooltip, minWidth: 150, enableColumnMenu: false, enableSorting: false},
-                {field: 'vol', displayName: 'Vol', maxWidth: 70, cellTemplate: templatePlain, enableColumnMenu: false, enableSorting: false},
-                {field: 'iss', displayName: 'Iss', maxWidth: 70, cellTemplate: templatePlain, enableColumnMenu: false, enableSorting: false},
-                {field: 'pd', displayName: 'Pub Date (numeric)', cellTemplate: templateJournalTitleWithTooltip, enableColumnMenu: false, enableSorting: false},
-                {field: 'id', displayName: 'Pub Date (alpha)', cellTemplate: templateJournalTitleWithTooltip, enableColumnMenu: false, enableSorting: false},
-                {field: 'id', displayName: 'Import Date', cellTemplate: templateJournalTitleWithTooltip, enableColumnMenu: false, enableSorting: false}
+                {field: 'vol', displayName: 'Vol', maxWidth: 70, cellTemplate: templatePlain, minWidth: 50, enableColumnMenu: false, enableSorting: false},
+                {field: 'iss', displayName: 'Iss', maxWidth: 70, cellTemplate: templatePlain, minWidth: 50, enableColumnMenu: false, enableSorting: false},
+                {field: 'pd', displayName: 'Pub Date (numeric)', cellTemplate: templateJournalTitleWithTooltip, minWidth: 50, enableColumnMenu: false, enableSorting: false},
+                {field: 'id', displayName: 'Pub Date (alpha)', cellTemplate: templateJournalTitleWithTooltip, minWidth: 50, enableColumnMenu: false, enableSorting: false},
+                {field: 'id', displayName: 'Import Date', cellTemplate: templateJournalTitleWithTooltip, minWidth: 50, enableColumnMenu: false, enableSorting: false}
             ],
             enableRowSelection: true,
             enableSelectAll: true,
