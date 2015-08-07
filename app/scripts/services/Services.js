@@ -64,7 +64,7 @@ app.service('toggleFeatures', function ($rootScope, $state, updateSession, toDef
                 $rootScope.state.showNavBar = true;
                 $rootScope.state.showActionBar = false;
                 break;
-            case 'search.doc':
+            case 'doc':
                 $rootScope.state.showNavBar = true;
                 $rootScope.state.showActionBar = true;
                 break;
@@ -87,10 +87,10 @@ app.service('goTo', function ($rootScope, $state, updateDocumentInfo, $window, t
             case 'search':
                 $state.go(toState);
                 break;
-            case 'search.doc':
+            case 'doc':
                 var id = toParams ? toParams.id : $rootScope.state.currentDocument.id;
                 $state.go(toState, {id: id});
-                updateDocumentInfo(id);
+                updateDocumentInfo.update(id);
                 angular.element($window).scrollTop(0);
                 break;
         }
