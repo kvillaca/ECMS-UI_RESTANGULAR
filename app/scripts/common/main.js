@@ -32,8 +32,6 @@ angular.module('ecmsEcmsUiApp')
                                       clearSearchResults,
                                       getIPService) {
 
-        //var mainScope = this;   // alias for this controller
-
         // Scope defaults
         $rootScope.loginError = false;
         $rootScope.userLoggedIn = ecmsSession.getUserLoggedIn() || false;
