@@ -1,3 +1,9 @@
-<div class="ui-grid-cell-contents" ng-class="(col.field === 'pub') ? 'bold' : ''" popover="{{row.entity[col.field]}}"  popover-title="{{col.displayName}}" popover-append-to-body="true" popover-placement="bottom" popover-trigger="mouseenter" >
+<div class="ui-grid-cell-contents"
+     ng-class="(col.field === 'pub') ? 'bold' : ''"
+     popover="{{row.entity[col.field]}}"
+     popover-title="{{col.displayName}}"
+     popover-append-to-body="true"
+     popover-placement="bottom"
+     popover-trigger="mouseenter" >
     {{COL_FIELD || '--'}}
 </div>

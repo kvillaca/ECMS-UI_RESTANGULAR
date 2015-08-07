@@ -134,6 +134,7 @@ angular.module('ecmsEcmsUiApp', [
                 dirtyRawXML: false
             };
 
+
         /*
          * Restangular error interceptor, for errors that may impact the application in ways
          * that the user shouldn't be to continue.

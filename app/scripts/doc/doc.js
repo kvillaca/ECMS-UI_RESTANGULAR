@@ -21,7 +21,6 @@ angular.module('ecmsEcmsUiApp')
 
         var $this = this;   // alias for this controller
 
-
         $scope.editorOptions = {  // CodeMirror options
             lineWrapping: true,
             lineNumbers: true,
