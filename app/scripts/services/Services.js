@@ -22,8 +22,20 @@ app.service('updateSession', function ($sessionStorage) {
 /**
  * Terminate
  */
-app.service('terminate', function ($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders) {
+app.service('terminate', function ($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders, toDefaultState, updateSession) {
     return function () {
+
+        toDefaultState.setToDefaultState();
+        updateSession.session($rootScope.state);
+        $rootScope.loginError = false;
+        $rootScope.userLoggedIn = false;
+        $sessionStorage.userLoggedIn = false;
+        $rootScope.credentials = {
+            username: null,
+            password: null,
+            rememberMe: false
+        };
+
         $rootScope.sessionKey = null;
         delete $sessionStorage.session;
 
@@ -236,7 +248,6 @@ app.service('signout', function ($rootScope, $sessionStorage, terminate, $state,
         $rootScope.loginError = false;
         $rootScope.userLoggedIn = false;
         $sessionStorage.userLoggedIn = false;
-        terminate();
         $rootScope.credentials = {
             username: null,
             password: null,

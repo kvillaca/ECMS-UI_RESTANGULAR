@@ -167,7 +167,7 @@ angular.module('ecmsEcmsUiApp', [
             // sign user out if they are headed for login view
             if (toState.name === 'login') {
                 terminate();
-                signout.out();
+                return;
             }
 
             // force login if page is private

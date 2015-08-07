@@ -55,11 +55,11 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-        $scope.goTo = function(valueForSeach) {
+        /*$scope.goTo = function(valueForSeach) {
             console.log("search-input.js");
             goTo.go(valueForSeach);
 
-        }
+        }*/
 
 
 
