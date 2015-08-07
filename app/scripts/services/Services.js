@@ -103,7 +103,6 @@ app.service('updateDocumentInfo', function ($rootScope) {
     };
 });
 
-
 /**
  * Session - Get and Set.
  */
@@ -230,8 +229,10 @@ app.service('tailorData', function ($rootScope) {
 /*****************************************
  * SIGN OUT
  *****************************************/
-app.service('signout', function ($rootScope, $sessionStorage, terminate, $state, goTo) {
+app.service('signout', function ($rootScope, $sessionStorage, terminate, $state, toggleFeatures, toDefaultState, updateSession, goTo) {
     this.out = function () {
+        toDefaultState.setToDefaultState();
+        updateSession.session($rootScope.state);
         $rootScope.loginError = false;
         $rootScope.userLoggedIn = false;
         $sessionStorage.userLoggedIn = false;

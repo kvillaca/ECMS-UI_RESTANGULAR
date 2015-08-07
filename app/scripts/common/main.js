@@ -195,15 +195,10 @@ angular.module('ecmsEcmsUiApp')
 
 
         $scope.signOut = function () {
-            toDefaultState.setToDefaultState();
-            updateSession.session($rootScope.state);
             signout.out();
         };
 
-        /*$rootScope.$on('signout', function () {
+        $rootScope.$on('signout', function () {
             $scope.signOut();
-            /!*toDefaultState.setToDefaultState();
-            updateSession.session($rootScope.state);
-            signout.out();*!/
-        });*/
+        });
     });

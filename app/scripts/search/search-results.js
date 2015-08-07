@@ -10,11 +10,10 @@ angular.module('ecmsEcmsUiApp')
     .controller('SearchResultsCtrl', function ($scope,
                                                $rootScope,
                                                $timeout,
-                                               spinner) {
+                                               spinner,
+                                               goTo) {
 
         // Declaring all variables
-        // alias for this controller
-        //var $this = this;
         // template for grid cell with popover tooltip and anchor
         var templateWithTooltip = 'templates/cellWithTooltip.html';
         // template for grid cell with popover tooltip, no anchor
@@ -22,6 +21,7 @@ angular.module('ecmsEcmsUiApp')
         // template for plain cell content (no popover, no anchor)
         var templatePlain = 'templates/cell.html';
 
+        $scope.controllerName = "SearchResultsCtrl";
 
         $scope.searchQueryInput = '';
         $scope.searchResults = undefined;
@@ -89,6 +89,11 @@ angular.module('ecmsEcmsUiApp')
 
 
 
+        $scope.goTo = function(valueForSeach) {
+            console.log('search-result.js');
+            goTo.go(valueForSeach);
+        }
+
         $scope.initView = function() {
             $scope.updateGridOptions();
             //console.log('$rootScope.state.searchResults ' + $rootScope.state.searchResults);
@@ -96,7 +101,6 @@ angular.module('ecmsEcmsUiApp')
                 $scope.updateGridOptions();
             }
         };
-
 
 
         /**
@@ -199,19 +203,12 @@ angular.module('ecmsEcmsUiApp')
             }
 
             resize(Math.min($rootScope.state.totalItems, $rootScope.state.pageSize, $rootScope.state.searchResults.length));
-            //console.log("state.searchResults.length = " + $scope.state.searchResults.length)
         };
 
 
         $rootScope.$on('resizeGrid', function () {
             if ($rootScope.state.searchResults) {
-                //$scope.updateGridOptions();
                 $scope.initView();
             }
         });
-
-        //if ($rootScope.state.searchResults) {
-        //    $scope.updateGridOptions();
-        //}
-
     });
