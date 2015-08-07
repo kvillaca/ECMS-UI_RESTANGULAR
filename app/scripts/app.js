@@ -62,6 +62,7 @@ ecmsApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', '
                             templateUrl: 'scripts/search/search-results.html',
                             controller: 'SearchResultsCtrl'
                         }
+
                     },
                     resolve: {
                         setPage: function ($rootScope) {
@@ -77,8 +78,8 @@ ecmsApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', '
                                       controller: 'DocCtrl',
                                       resolve: {
                                           setPage: function ($rootScope) {
-                                              console.log('Doc $rootScope: ' + $rootScope.page);
-                                              //$rootScope.page = 'doc';
+                                              //console.log('Doc $rootScope: ' + $rootScope.page);
+                                              //$rootScope.page = 'search';
                                           }
                                       }
                 })

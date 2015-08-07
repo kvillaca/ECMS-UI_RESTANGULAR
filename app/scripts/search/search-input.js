@@ -84,7 +84,6 @@ angular.module('ecmsEcmsUiApp')
             Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
-                    spinner.off();
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
                     $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
                     if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {

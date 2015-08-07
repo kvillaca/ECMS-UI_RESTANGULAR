@@ -17,7 +17,11 @@ angular.module('ecmsEcmsUiApp')
                                      $timeout,
                                      $stateParams,
                                      goTo,
+                                     ecmsSession,
                                      spinner,
+                                     Restangular,
+                                     paramsToString,
+                                     RESTAPIversion,
                                      updateDocumentService) {
 
         var $this = this;   // alias for this controller
@@ -36,14 +40,42 @@ angular.module('ecmsEcmsUiApp')
 
 
         $scope.initDoc = function() {
-            loadDoc($scope.documentId);
+            // If we are going to create a new document, we should not do anything if the user doesn't have
+            // selected a doc number, so we have a if
+            if ($scope.documentId != undefined && $scope.documentId != '' && $scope.documentId.length > 0) {
+                $scope.loadDoc($scope.documentId);
+            }
         };
 
 
 
         $scope.loadDoc = function(documentIdForLoad) {
 
+            spinner.on();
+            // Just have added the setDefaultHeaders due after pull the service has stopped to work.
+            // Once it bo back to work it's just remove it!
+            Restangular.setDefaultHeaders({
+                'Content-Type': 'application/json',
+                'X-ECMS-Session': ecmsSession.getSession()
+            });
+
+            Restangular.one(RESTAPIversion + '/documents/' + documentIdForLoad).
+                customGET().
+                then(function (resp) {
+                    var valueReceived = resp;
+                    getDocumentSuccess(resp.data);
+                    spinner.off();
+                }, function (fail) {
+                    $timeout(function () {
+                        $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
+                        clearSearchResults.clear();
+                        goTo.to('search.input');       // probably temporary
+                        console.log(fail);
+                        spinner.off();
+                    });
+                });
         };
+
 
 
 
@@ -243,7 +275,7 @@ angular.module('ecmsEcmsUiApp')
             if ($scope.goToId) {
                 $rootScope.state.currentDocument.id = $scope.goToId;
                 //goTo.go('search.doc', {id: $rootScope.state.currentDocument.id});
-                goTo.go('doc', {id: $rootScope.state.currentDocument.id});
+                goTo.to('doc', {id: $rootScope.state.currentDocument.id});
             }
 
             // transition complete
@@ -467,7 +499,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.updateSearchResults ();
 
             $timeout(function () {  // wait for Save to finish; could be done via a promise
-                goTo.go('search.results');
+                goTo.to('search.results');
                 $scope.dismissAlert();
             }, 2400);
 
@@ -489,7 +521,7 @@ angular.module('ecmsEcmsUiApp')
         $scope.closeDocument = function () {
 
             if (!$scope.isDirty()) {
-                goTo.go('search.results');
+                goTo.to('search.results');
                 return;
             }
 
@@ -543,7 +575,7 @@ angular.module('ecmsEcmsUiApp')
                     $rootScope.state.dirtyRawXML = false;
 
                     if (callbackLabel === 'close') {
-                        goTo.go('search.results');
+                        goTo.to('search.results');
                     }
 
                     if (callbackLabel === 'next' || callbackLabel === 'prev') {
