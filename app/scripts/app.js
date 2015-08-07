@@ -62,11 +62,6 @@ ecmsApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', '
                             templateUrl: 'scripts/search/search-results.html',
                             controller: 'SearchResultsCtrl'
                         }
-                        //,
-                        //'doc@search': {
-                        //    templateUrl: 'scripts/doc/doc.html',
-                        //    controller: 'DocCtrl'
-                        //}
                     },
                     resolve: {
                         setPage: function ($rootScope) {

@@ -75,6 +75,8 @@ angular.module('ecmsEcmsUiApp')
 
             spinner.on();
 
+            // Just have added the setDefaultHeaders due after pull the service has stopped to work.
+            // Once it bo back to work it's just remove it!
             Restangular.setDefaultHeaders({
                 'Content-Type': 'application/json',
                 'X-ECMS-Session': ecmsSession.getSession()
@@ -82,12 +84,6 @@ angular.module('ecmsEcmsUiApp')
             Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
-
-                    Restangular.setDefaultHeaders({
-                        'Content-Type': 'application/json',
-                        'X-ECMS-Session': ecmsSession.getSession()
-                    });
-
                     spinner.off();
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
                     $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
