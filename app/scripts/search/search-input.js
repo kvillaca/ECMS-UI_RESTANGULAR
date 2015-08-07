@@ -55,6 +55,14 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
+        $scope.goTo = function(valueForSeach) {
+            console.log("search-input.js");
+            goTo.go(valueForSeach);
+
+        }
+
+
+
         /**
          * @TODO - move to Search controller
          * @param input

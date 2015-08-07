@@ -32,6 +32,19 @@ angular.module('ecmsEcmsUiApp')
              */
         };
 
+
+        //$this.goTo = function(valueForSeach) {
+        //    console.log('doc.js - $this');
+        //    goTo.go(valueForSeach);
+        //}
+
+
+        $scope.goTo = function(valueForSeach) {
+            console.log('doc.js - $scope');
+            goTo.go(valueForSeach);
+        }
+
+
         $scope.codemirrorLoaded = function (_editor) {
             $scope.codeMirrorArea = _editor;
             // Events
@@ -490,6 +503,8 @@ angular.module('ecmsEcmsUiApp')
         $rootScope.$on('closeDocument', function () {
             $scope.closeDocument();
         });
+
+
 
 
         /*********************************************
