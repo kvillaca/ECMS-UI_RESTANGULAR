@@ -24,16 +24,13 @@ angular.module('ecmsEcmsUiApp', [
     'restangular'
 ])
     .config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider',
-        function ($stateProvider, $urlRouterProvider, RestangularProvider, $sessionStorage) {
+        function ($stateProvider, $urlRouterProvider, RestangularProvider) {
 
             // Restangular initial configs
-            $sessionStorage.$default({session: null});
-            $sessionStorage.session = null;
             RestangularProvider.setBaseUrl('/ecms/rest/');
             RestangularProvider.setFullResponse(true);
             RestangularProvider.setDefaultHeaders({
-                'Content-Type': 'application/json',
-                'X-ECMS-Session': $sessionStorage.session
+                'Content-Type': 'application/json'
             });
 
 

@@ -87,10 +87,10 @@ angular.module('ecmsEcmsUiApp')
                 customGET('DocumentSearch').
                 then(function (resp) {
 
-                    /*Restangular.setDefaultHeaders({
+                    Restangular.setDefaultHeaders({
                         'Content-Type': 'application/json',
                         'X-ECMS-Session': ecmsSession.getSession()
-                    });*/
+                    });
 
                     spinner.off();
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;

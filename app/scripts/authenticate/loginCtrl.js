@@ -69,8 +69,6 @@ angular.module('ecmsEcmsUiApp')
                         $this.sessionKey = response.data.UserLoginEvent.SessionKey;
                         $sessionStorage.$default({session: null});
                         ecmsSession.set($this.sessionKey, true);
-                        // update headers for the rest of the app because all rest calls from now on will need auth info
-                        updateRestangularHeaders.addSessionId($this.sessionKey);
                         $rootScope.loginError = false;
                         $rootScope.userLoggedIn = true;
                         $rootScope.credentials = {
