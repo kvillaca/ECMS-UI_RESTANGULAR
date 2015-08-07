@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-angular.module('ecmsEcmsUiApp', [
+var ecmsApp = angular.module('ecmsEcmsUiApp', [
     'ngAnimate',
     'ui.router',    // replaces ngRoute
     'ngSanitize',
@@ -22,20 +22,14 @@ angular.module('ecmsEcmsUiApp', [
     'ui.codemirror',
     'ui.bootstrap',
     'restangular'
-])
-    .config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider',
-        function ($stateProvider, $urlRouterProvider, RestangularProvider, $sessionStorage) {
+]);
+
+ecmsApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', '$stateParamsProvider',
+        function ($stateProvider, $urlRouterProvider, RestangularProvider, $stateParamsProvider) {
 
             // Restangular initial configs
-            $sessionStorage.$default({session: null});
-            $sessionStorage.session = null;
             RestangularProvider.setBaseUrl('/ecms/rest/');
             RestangularProvider.setFullResponse(true);
-            RestangularProvider.setDefaultHeaders({
-                'Content-Type': 'application/json',
-                'X-ECMS-Session': $sessionStorage.session
-            });
-
 
 
             // config for ui-Router
@@ -67,11 +61,12 @@ angular.module('ecmsEcmsUiApp', [
                         'results@search': {
                             templateUrl: 'scripts/search/search-results.html',
                             controller: 'SearchResultsCtrl'
-                        },
-                        'doc@search': {
-                            templateUrl: 'scripts/doc/doc.html',
-                            controller: 'DocCtrl'
                         }
+                        //,
+                        //'doc@search': {
+                        //    templateUrl: 'scripts/doc/doc.html',
+                        //    controller: 'DocCtrl'
+                        //}
                     },
                     resolve: {
                         setPage: function ($rootScope) {
@@ -81,7 +76,17 @@ angular.module('ecmsEcmsUiApp', [
                 })
                 .state('search.input', {url: '/input', module: 'private'})
                 .state('search.results', {url: '/results', module: 'private'})
-                .state('search.doc', {url: '/doc/:id', module: 'private'})
+                .state('doc', {url: '/doc/:id',
+                                      module: 'private',
+                                      templateUrl: 'scripts/doc/doc.html',
+                                      controller: 'DocCtrl',
+                                      resolve: {
+                                          setPage: function ($rootScope) {
+                                              console.log('Doc $rootScope: ' + $rootScope.page);
+                                              //$rootScope.page = 'doc';
+                                          }
+                                      }
+                })
                 .state('faq', {
                     url: '/faq',
                     templateUrl: 'views/faq.html',
@@ -104,8 +109,9 @@ angular.module('ecmsEcmsUiApp', [
                         }
                     }
                 });
-        }])
-    .run(function ($rootScope,$location, $state, isPrivateService, terminate, getIPService, Restangular, signout, $sessionStorage, gridOptions) {
+        }]);
+
+ecmsApp.run(function ($rootScope,$location, $state, isPrivateService, terminate, getIPService, Restangular, signout, $sessionStorage, gridOptions) {
         // Root variables, mean module public variables.
         var OK_RESPONSE = 200;
 
