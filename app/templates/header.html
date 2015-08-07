@@ -37,15 +37,15 @@
         <div id="gray-bar" class="nav navbar-nav navbar-below" ng-if="userLoggedIn">
             <ul class="nav navbar-nav">
                 <li ng-class="state.currentView === 'search.input' ? 'active' : ''"><a ui-sref="search.input"
-                                                                                       ng-click="grid.appScope.goTo.go('search.input')">Home</a>
+                                                                                       ng-click="goTo('search.input')">Home</a>
                 </li>
                 <li ng-class="!state.searchResults.length ? 'disabled' : state.currentView === 'search.results' ? 'active' : ''">
                     <a ui-sref="search.results"
-                       ng-click="!state.searchResults.length ? $event.preventDefault() : grid.appScope.goTo.go('search.results')">Search</a>
+                       ng-click="!state.searchResults.length ? $event.preventDefault() : goTo('search.results')">Search</a>
                 </li>
                 <li ng-class="!state.currentDocument.id ? 'disabled' : state.currentView === 'search.doc' ? 'active' : ''">
                     <a ui-sref="search.doc({ id: state.currentDocument.id })"
-                       ng-click="!state.currentDocument.id ? $event.preventDefault() : grid.appScope.goTo.go('search.docBla')">Document</a></li>
+                       ng-click="!state.currentDocument.id ? $event.preventDefault() : goTo('search.doc')">Document</a></li>
             </ul>
 
             <!--<ul class="nav navbar-nav navbar-right">

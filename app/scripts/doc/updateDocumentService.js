@@ -104,7 +104,7 @@ angular.module('ecmsEcmsUiApp')
                     deferred.reject(validateErrorBase(error));
                 }
 
-                Restangular.post (RESTAPIversion + '/methods/document/validate', request)
+                Restangular.one (RESTAPIversion + '/methods/document/validate', request)
                     .then(validateSuccess, validateError);
 
                 return deferred.promise;

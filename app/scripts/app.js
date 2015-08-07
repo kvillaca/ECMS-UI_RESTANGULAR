@@ -167,7 +167,7 @@ angular.module('ecmsEcmsUiApp', [
         });
 
 
-        $rootScope.$on('$stateChangeStart', function (event, toState) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
             // sign user out if they are headed for login view
             if (toState.name === 'login') {
                 terminate();
@@ -178,6 +178,10 @@ angular.module('ecmsEcmsUiApp', [
             if (isPrivateService.check(toState)) {
                 event.preventDefault();
                 $state.go('login');
+            }
+
+            if (toState.name === 'search.doc') {
+                $rootScope.state.currentDocument.id = toParams.id;
             }
         });
 });

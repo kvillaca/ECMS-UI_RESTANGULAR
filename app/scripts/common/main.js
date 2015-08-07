@@ -28,6 +28,7 @@ angular.module('ecmsEcmsUiApp')
                                       Restangular,
                                       paramsToString,
                                       spinner,
+                                      goTo,
                                       signout,
                                       clearSearchResults,
                                       getIPService) {
@@ -80,6 +81,16 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.rawXML = null;
             $rootScope.state.dirtyRawXML = false;
             $scope.codeMirrorArea = null;
+        };
+
+        $scope.goTo = function(destination) {
+            if (destination == 'search.doc') {
+                goTo.go(destination, {id: $rootScope.state.currentDocument.id});
+            }
+            else {
+                goTo.go(destination);
+            }
+
         };
 
 
