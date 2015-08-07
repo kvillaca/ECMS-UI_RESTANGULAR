@@ -21,7 +21,6 @@ angular.module('ecmsEcmsUiApp')
                                       gridOptions,
                                       getSearchResultsService,
                                       searchErrorService,
-                                      goTo,
                                       $q,
                                       $timeout,
                                       terminate,
@@ -83,15 +82,15 @@ angular.module('ecmsEcmsUiApp')
             $scope.codeMirrorArea = null;
         };
 
-        $scope.goTo = function(destination) {
-            if (destination == 'search.doc') {
-                goTo.go(destination, {id: $rootScope.state.currentDocument.id});
-            }
-            else {
-                goTo.go(destination);
-            }
-
-        };
+        //$scope.goTo = function(destination) {
+        //    if (destination == 'search.doc') {
+        //        goTo.go(destination, {id: $rootScope.state.currentDocument.id});
+        //    }
+        //    else {
+        //        goTo.go(destination);
+        //    }
+        //
+        //};
 
 
         /*

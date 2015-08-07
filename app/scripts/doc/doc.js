@@ -15,11 +15,14 @@ angular.module('ecmsEcmsUiApp')
                                      $rootScope,
                                      $window,
                                      $timeout,
+                                     $stateParams,
                                      goTo,
                                      spinner,
                                      updateDocumentService) {
 
         var $this = this;   // alias for this controller
+
+        $scope.documentId = $stateParams.id;
 
         $scope.editorOptions = {  // CodeMirror options
             lineWrapping: true,
@@ -32,15 +35,16 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-        //$this.goTo = function(valueForSeach) {
-        //    console.log('doc.js - $this');
-        //    goTo.go(valueForSeach);
-        //}
-
-
-        $scope.goTo = function(valueForSeach) {
-            goTo.go(valueForSeach);
+        $scope.initDoc = function() {
+            loadDoc($scope.documentId);
         };
+
+
+
+        $scope.loadDoc = function(documentIdForLoad) {
+
+        };
+
 
 
         $scope.codemirrorLoaded = function (_editor) {
@@ -238,7 +242,8 @@ angular.module('ecmsEcmsUiApp')
             $scope.goToId = $this.getAndGoLoop(indexToFind);
             if ($scope.goToId) {
                 $rootScope.state.currentDocument.id = $scope.goToId;
-                goTo.go('search.doc', {id: $rootScope.state.currentDocument.id});
+                //goTo.go('search.doc', {id: $rootScope.state.currentDocument.id});
+                goTo.go('doc', {id: $rootScope.state.currentDocument.id});
             }
 
             // transition complete

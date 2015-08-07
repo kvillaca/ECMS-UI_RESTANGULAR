@@ -69,6 +69,7 @@ angular.module('ecmsEcmsUiApp')
                         $this.sessionKey = response.data.UserLoginEvent.SessionKey;
                         $sessionStorage.$default({session: null});
                         ecmsSession.set($this.sessionKey, true);
+                        updateRestangularHeaders.addSessionId($this.sessionKey);
                         $rootScope.loginError = false;
                         $rootScope.userLoggedIn = true;
                         $rootScope.credentials = {

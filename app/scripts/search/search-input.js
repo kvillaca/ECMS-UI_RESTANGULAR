@@ -55,14 +55,6 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-        /*$scope.goTo = function(valueForSeach) {
-            console.log("search-input.js");
-            goTo.go(valueForSeach);
-
-        }*/
-
-
-
         /**
          * @TODO - move to Search controller
          * @param input
@@ -83,6 +75,10 @@ angular.module('ecmsEcmsUiApp')
 
             spinner.on();
 
+            Restangular.setDefaultHeaders({
+                'Content-Type': 'application/json',
+                'X-ECMS-Session': ecmsSession.getSession()
+            });
             Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
