@@ -192,14 +192,18 @@ app.service('getIPService', function ($http, $q) {
 app.service('updateRestangularHeaders', function (Restangular) {
     return {
         addSessionId: function (sessionKey) {
-            Restangular.setDefaultHeaders({
-                'Content-Type': 'application/json',
-                'X-ECMS-Session': sessionKey
+            return Restangular.withConfig(function(RestangularConfigurer) {
+                RestangularConfigurer.setDefaultHeaders({
+                    'Content-Type': 'application/json',
+                    'X-ECMS-Session': sessionKey
+                });
             });
         },
         removeSessionId: function () {
-            Restangular.setDefaultHeaders({
-                'Content-Type': 'application/json'
+            return Restangular.withConfig(function(RestangularConfigurer) {
+                RestangularConfigurer.setDefaultHeaders({
+                    'Content-Type': 'application/json'
+                });
             });
         }
     };
