@@ -23,7 +23,7 @@ angular.module('ecmsEcmsUiApp')
         // template for plain cell content (no popover, no anchor)
         var templatePlain = 'templates/cell.html';
 
-        $scope.controllerName = "SearchResultsCtrl";
+        $scope.controllerName = 'SearchResultsCtrl';
 
         $scope.searchQueryInput = '';
         $scope.searchResults = undefined;
@@ -84,10 +84,10 @@ angular.module('ecmsEcmsUiApp')
 
 
 
-        $scope.goTo = function(valueForSeach) {
-            goTo.go(valueForSeach);
-            toggleFeatures.toggle(valueForSeach);
-        }
+        $scope.goTo = function(event) {
+            $rootScope.state.currentDocument.id = event.target.hash.split('#/search/doc/')[1];
+            goTo.go('search.doc');
+        };
 
         $scope.initView = function() {
             $scope.updateGridOptions();

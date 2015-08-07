@@ -56,10 +56,10 @@ angular.module('ecmsEcmsUiApp')
 
 
         $scope.goTo = function(valueForSeach) {
-            console.log("search-input.js");
+            console.log('search-input.js');
             goTo.go(valueForSeach);
 
-        }
+        };
 
 
 

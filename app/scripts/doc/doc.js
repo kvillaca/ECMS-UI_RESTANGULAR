@@ -41,7 +41,7 @@ angular.module('ecmsEcmsUiApp')
         $scope.goTo = function(valueForSeach) {
             console.log('doc.js - $scope');
             goTo.go(valueForSeach);
-        }
+        };
 
 
         $scope.codemirrorLoaded = function (_editor) {

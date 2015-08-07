@@ -5,5 +5,5 @@
      popover-placement="bottom"
      popover-trigger="mouseenter" >
     <a ui-sref="search.doc({ id: row.entity.documentid })"
-       ng-click="grid.appScope.goTo('search.doc')">{{COL_FIELD}}</a>
+       ng-click="grid.appScope.goTo($event)">{{COL_FIELD || '--'}}</a>
 </div>

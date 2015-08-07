@@ -11,9 +11,7 @@
                               ng-keydown="submitOnEnterKey($event, state.searchQuery)"
                               minlength="3">
                     </textarea>
-                    <div class="alert alert-danger"
-                         ng-show="queryForm.searchQueryInput.$invalid"
-                         ng-hide="queryForm.searchQueryInput.$valid">Minimum of 3 (three) chars needed to make a search.</div>
+
                     <div class="pull-right text-center">
                         <button class="btn btn-default" ng-disabled="queryForm.searchQueryInput.$invalid" type="submit">
                             <span class="uxf-icon uxf-search" aria-hidden="true"></span> Search
@@ -22,6 +20,9 @@
                         <a href="#" ng-click="$event.preventDefault(); clearForm()">Clear Search</a>
                     </div>
 
+                    <div class="alert alert-danger clear-both"
+                         ng-show="queryForm.searchQueryInput.$invalid"
+                         ng-hide="queryForm.searchQueryInput.$valid">Minimum of 3 (three) chars needed to make a search.</div>
                 </div>
             </div>
         </div>

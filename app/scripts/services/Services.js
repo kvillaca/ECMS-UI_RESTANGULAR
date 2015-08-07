@@ -22,8 +22,20 @@ app.service('updateSession', function ($sessionStorage) {
 /**
  * Terminate
  */
-app.service('terminate', function ($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders) {
+app.service('terminate', function ($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders, toDefaultState, updateSession) {
     return function () {
+
+        toDefaultState.setToDefaultState();
+        updateSession.session($rootScope.state);
+        $rootScope.loginError = false;
+        $rootScope.userLoggedIn = false;
+        $sessionStorage.userLoggedIn = false;
+        $rootScope.credentials = {
+            username: null,
+            password: null,
+            rememberMe: false
+        };
+
         $rootScope.sessionKey = null;
         delete $sessionStorage.session;
 
@@ -39,7 +51,7 @@ app.service('terminate', function ($rootScope, $sessionStorage, ecmsSession, upd
  * @param view, scope variable
  * @return scope updated
  */
-app.service('toggleFeatures', function ($rootScope, $state, updateSession, redirect, toDefaultState) {
+app.service('toggleFeatures', function ($rootScope, $state, updateSession, toDefaultState) {
     this.toggle = function (view) {
         $rootScope.state.currentView = view;
         // toggle features per the view we're loading
@@ -48,20 +60,13 @@ app.service('toggleFeatures', function ($rootScope, $state, updateSession, redir
                 toDefaultState.setToDefaultState();
                 break;
             case 'search.input':
-                $rootScope.state.showNavBar = true;
-                $rootScope.state.showActionBar = false;
-                redirect.to('updateNavbar', 'input', undefined);
-                break;
             case 'search.results':
                 $rootScope.state.showNavBar = true;
                 $rootScope.state.showActionBar = false;
-                redirect.to('resizeGrid', undefined, undefined);
-                redirect.to('updateNavbar', 'results', undefined);
                 break;
             case 'search.doc':
                 $rootScope.state.showNavBar = true;
                 $rootScope.state.showActionBar = true;
-                redirect.to('updateNavbar', 'doc', undefined);
                 break;
         }
         updateSession.session($rootScope.state);
@@ -73,50 +78,23 @@ app.service('toggleFeatures', function ($rootScope, $state, updateSession, redir
 /*
  * Redirect, to try avoid $broadcast and $on
  */
-app.service('redirect', function ($rootScope, goTo, updateDocumentInfo, $window) {
-    this.to = function (toState, toParams, fromState) {
+app.service('goTo', function ($rootScope, $state, updateDocumentInfo, $window, toggleFeatures) {
+    this.go = function (toState, toParams) {
         switch (toState) {
+            case 'login':
+            case 'search.results':
             case 'search.input':
             case 'search':
-                goTo.go(toState);
-                break;
-            case 'search.results':
-                if (!fromState.name || fromState.name === 'search.results') {
-                    goTo.go('search.input');
-                } else {
-                    goTo.go(toState);
-                }
+                $state.go(toState);
                 break;
             case 'search.doc':
-                updateDocumentInfo(toParams.id);
-                goTo.go(toState, {id: toParams.id});
+                var id = toParams ? toParams.id : $rootScope.state.currentDocument.id;
+                $state.go(toState, {id: id});
+                updateDocumentInfo.update(id);
                 angular.element($window).scrollTop(0);
                 break;
         }
-    };
-});
-
-
-
-/**
- * Go to new view
- *
- */
-app.service('goTo', function ($rootScope, $state) {
-    this.go = function (newView, options, scopeStateCurrentDocumentId) {
-        //toggleFeatures.toggle(newView);
-        $rootScope.state.currentView = newView;
-        if (options) {
-            $state.go(newView, options);
-        }
-        else {
-            if (newView === 'search.doc') {
-                $state.go(newView, {id: scopeStateCurrentDocumentId});
-            }
-            else {
-                $state.go(newView);
-            }
-        }
+        toggleFeatures.toggle (toState);
         $rootScope.$broadcast('updateNavbar');
     };
 });
@@ -129,7 +107,6 @@ app.service('updateDocumentInfo', function ($rootScope) {
             var row = $rootScope.state.searchResults [i];
             if (row.documentid === id) {
                 $rootScope.state.currentDocument.index = row.searchResultIndex;
-                $rootScope.state.currentDocument.indexOnPage = (i + 1);
                 $rootScope.$broadcast('updateCurrentDocument');
                 break;
             }
