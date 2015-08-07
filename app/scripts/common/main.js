@@ -21,6 +21,7 @@ angular.module('ecmsEcmsUiApp')
                                       gridOptions,
                                       getSearchResultsService,
                                       searchErrorService,
+                                      goTo,
                                       $q,
                                       $timeout,
                                       terminate,

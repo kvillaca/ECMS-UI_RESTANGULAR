@@ -11,9 +11,7 @@ angular.module('ecmsEcmsUiApp')
                                                $rootScope,
                                                $timeout,
                                                spinner,
-                                               goTo,
-                                               toggleFeatures) {
-
+                                               goTo) {
 
         // Declaring all variables
         // template for grid cell with popover tooltip and anchor
@@ -38,6 +36,14 @@ angular.module('ecmsEcmsUiApp')
             pageSizes: undefined
         };
         $scope.gridApi = undefined;
+
+        /*if ($rootScope.state.pageNumber) {
+            $this.paginationOptions = {
+                pageNumber: $rootScope.state.pageNumber,
+                pageSize: $rootScope.state.pageSize,
+                pageSizes: $rootScope.state.pageSizes
+            };
+        }*/
 
 
         $scope.gridOptions = {
@@ -83,10 +89,9 @@ angular.module('ecmsEcmsUiApp')
 
 
 
-
         $scope.goTo = function(valueForSeach) {
+            console.log('search-result.js');
             goTo.go(valueForSeach);
-            toggleFeatures.toggle(valueForSeach);
         }
 
         $scope.initView = function() {

@@ -55,11 +55,11 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-        $scope.goTo = function(valueForSeach) {
+        /*$scope.goTo = function(valueForSeach) {
             console.log("search-input.js");
             goTo.go(valueForSeach);
 
-        }
+        }*/
 
 
 
@@ -86,6 +86,12 @@ angular.module('ecmsEcmsUiApp')
             Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
                 customGET('DocumentSearch').
                 then(function (resp) {
+
+                    /*Restangular.setDefaultHeaders({
+                        'Content-Type': 'application/json',
+                        'X-ECMS-Session': ecmsSession.getSession()
+                    });*/
+
                     spinner.off();
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
                     $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
@@ -93,19 +99,19 @@ angular.module('ecmsEcmsUiApp')
                         $rootScope.state.searchResults = tailorData.data($rootScope.state.searchResults);
                         $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
                         $rootScope.$broadcast('resizeGrid');
-                        goTo.go('search.results');
+                        goTo.to('search.results');
                     } else {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
                         clearSearchResults.clear();
-                        goTo.go('search.input');       // probably temporary
+                        goTo.to('search.input');       // probably temporary
                     }
                     spinner.off();
                 }, function (fail) {
                     $timeout(function () {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
                         clearSearchResults.clear();
-                        goTo.go('search.input');       // probably temporary
-                        //console.log(fail);
+                        goTo.to('search.input');       // probably temporary
+                        console.log(fail);
                         spinner.off();
                     });
                 });

@@ -1,4 +1,4 @@
-<form name="editorForm" id="editorForm">
+<form ng-init="initDoc()" name="editorForm" id="editorForm">
     <div class="alert-wrapper" ng-class="(statusAlert.statusClass !== null ? 'fade in' : 'fade out')" ng-if="statusAlert.statusClass">
         <div class="alert" ng-class="statusAlert.statusClass">
             <button ng-if="statusAlert.status === 'Error'" type="button" class="close" aria-label="Close" ng-click="dismissAlert()"><span
