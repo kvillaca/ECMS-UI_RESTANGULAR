@@ -81,6 +81,16 @@ angular.module('ecmsEcmsUiApp')
             $scope.codeMirrorArea = null;
         };
 
+        $scope.goTo = function(destination) {
+            if (destination == 'search.doc') {
+                goTo.go(destination, {id: $rootScope.state.currentDocument.id});
+            }
+            else {
+                goTo.go(destination);
+            }
+
+        };
+
 
         /*
          * This method will eventually check with the backend if any part of the document
