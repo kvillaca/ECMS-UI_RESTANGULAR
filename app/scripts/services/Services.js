@@ -197,7 +197,7 @@ app.service('updateRestangularHeaders', function (Restangular) {
                 'X-ECMS-Session': sessionKey
             });
         },
-        removeSessionId: function () {      console.log('removing session');
+        removeSessionId: function () {
             Restangular.setDefaultHeaders({
                 'Content-Type': 'application/json'
             });

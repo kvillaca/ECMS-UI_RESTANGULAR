@@ -66,7 +66,7 @@ angular.module('ecmsEcmsUiApp')
             Restangular.one(RESTAPIversion).post('authenticate', angular.toJson(jsonInput, true)).
                 then(function (response) {
                     $timeout(function () {
-                        $this.sessionKey = response.data.UserLoginEvent.SessionKey;console.log(' session key ' + $this.sessionKey);
+                        $this.sessionKey = response.data.UserLoginEvent.SessionKey;
                         $sessionStorage.$default({session: null});
                         ecmsSession.set($this.sessionKey, true);
                         // update headers for the rest of the app because all rest calls from now on will need auth info
