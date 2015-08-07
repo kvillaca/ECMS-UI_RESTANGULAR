@@ -27,6 +27,7 @@ angular.module('ecmsEcmsUiApp')
                                       Restangular,
                                       paramsToString,
                                       spinner,
+                                      goTo,
                                       signout,
                                       clearSearchResults,
                                       getIPService) {

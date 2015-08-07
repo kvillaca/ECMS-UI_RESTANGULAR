@@ -94,6 +94,7 @@ app.service('goTo', function ($rootScope, $state, updateDocumentInfo, $window, t
                 angular.element($window).scrollTop(0);
                 break;
         }
+        $rootScope.state.currentView = toState;
         toggleFeatures.toggle (toState);
         $rootScope.$broadcast('updateNavbar');
     };
