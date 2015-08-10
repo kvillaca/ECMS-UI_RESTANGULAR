@@ -348,7 +348,6 @@ app.service('updateSearchResults', function($rootScope, Restangular, paramsToStr
         });
 
         $rootScope.state.errorMessage = '';
-        $rootScope.state.pageNumber = 1;
         $rootScope.state.currentDocument = {};
         $rootScope.state.rawXML = null;
         $rootScope.state.dirtyRawXML = false;
