@@ -24,6 +24,7 @@ angular.module('ecmsEcmsUiApp')
                                      paramsToString,
                                      RESTAPIversion,
                                      updateSearchResults,
+                                     updateDocumentInfo,
                                      updateDocumentService) {
 
         var $this = this;   // alias for this controller
@@ -46,7 +47,7 @@ angular.module('ecmsEcmsUiApp')
             // If we are going to create a new document, we should not do anything if the user doesn't have
             // selected a doc number, so we have a if
             if ($scope.documentId != undefined && $scope.documentId != '' && $scope.documentId.length > 0) {
-                $scope.loadDoc($scope.documentId);
+                $scope.loadDoc($scope.documentId, true);
             }
         };
 
@@ -63,11 +64,14 @@ angular.module('ecmsEcmsUiApp')
                 'X-ECMS-Session': ecmsSession.getSession()
             });
 
-            Restangular.one(RESTAPIversion + '/documents/' + documentIdForLoad).
+            var encodedId = encodeURIComponent(documentIdForLoad);
+
+            Restangular.one(RESTAPIversion + '/documents/' + encodedId).
                 customGET().
                 then(function (resp) {
                     var valueReceived = resp;
                     getDocumentSuccess(resp.data);
+                    updateDocumentInfo.update(documentIdForLoad);
                     spinner.off();
                 }, function (fail) {
                     $timeout(function () {
@@ -262,7 +266,7 @@ angular.module('ecmsEcmsUiApp')
             indexToFind = direction === 'next' ? $rootScope.state.currentDocument.index + 1 :
                                                  $rootScope.state.currentDocument.index - 1;
             // in transition
-            spinner.on();
+            //spinner.on();
             // page over for next
             if (indexToFind > $rootScope.state.indexRange [1]) {
                 $rootScope.state.pageNumber = $rootScope.state.pageNumber + 1;
@@ -290,22 +294,32 @@ angular.module('ecmsEcmsUiApp')
             $scope.goToId = $this.getAndGoLoop(indexToFind);
             if ($scope.goToId) {
                 $rootScope.state.currentDocument.id = $scope.goToId;
-                goTo.to('doc', {id: $rootScope.state.currentDocument.id});
+                $scope.loadDoc($rootScope.state.currentDocument.id);
             }
             // transition complete
-            spinner.off();
+            //spinner.off();
         };
 
         // Finds the doc id that we're trying to go to
         $this.getAndGoLoop = function (indexToFind) {
-            var row;
-            for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
-                row = $rootScope.state.searchResults[i];
-                if (indexToFind !== parseInt(row.searchResultIndex)) {
-                    continue;
-                }
-                break;
+            indexToFind--;
+            if (indexToFind < 0) {
+                indexToFind = 0;
+            } else if (indexToFind > $rootScope.state.searchResults.length - 1) {
+                indexToFind = $rootScope.state.searchResults.length - 1;
             }
+            var row = $rootScope.state.searchResults[indexToFind];
+            //if (indexToFind !== parseInt(row.searchResultIndex)) {
+            //    row.documentid = undefined;
+            //}
+            //var row;
+            //for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
+            //    row = $rootScope.state.searchResults[i];
+            //    if (indexToFind !== parseInt(row.searchResultIndex)) {
+            //        continue;
+            //    }
+            //    break;
+            //}
             return row.documentid;
         };
 

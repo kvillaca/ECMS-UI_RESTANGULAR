@@ -107,7 +107,8 @@ ecmsApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', '
                 });
         }]);
 
-ecmsApp.run(function ($rootScope,$location, $state, isPrivateService, terminate, getIPService, Restangular, signout, $sessionStorage, gridOptions) {
+ecmsApp.run(function ($rootScope,$location, $state, isPrivateService, terminate, getIPService,
+                      Restangular, signout, $sessionStorage, gridOptions, spinner) {
         // Root variables, mean module public variables.
         var OK_RESPONSE = 200;
 
@@ -147,6 +148,7 @@ ecmsApp.run(function ($rootScope,$location, $state, isPrivateService, terminate,
          */
         Restangular.setErrorInterceptor(function(response) {
             if (response.status !== OK_RESPONSE) {
+                spinner.off();
                 switch (response.status) {
                     case 500:
                         $rootScope.loginErrorText = response.data;
