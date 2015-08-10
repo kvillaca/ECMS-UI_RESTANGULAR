@@ -19,7 +19,6 @@ angular.module('ecmsEcmsUiApp')
                                       updateSession,
                                       toDefaultState,
                                       gridOptions,
-                                      getSearchResultsService,
                                       $q,
                                       $timeout,
                                       terminate,
