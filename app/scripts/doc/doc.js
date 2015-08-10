@@ -17,6 +17,7 @@ angular.module('ecmsEcmsUiApp')
                                      $stateParams,
                                      goTo,
                                      ecmsSession,
+                                     signout,
                                      spinner,
                                      $filter,
                                      Restangular,
@@ -102,7 +103,6 @@ angular.module('ecmsEcmsUiApp')
          */
         function getDocumentSuccess(result) {
             $scope.document = result.Document;
-            //$rootScope.state.currentDocument = result.Document;
             $rootScope.state.rawXML = result.Document.Body.value;
             $scope.lastModifiedDate = formatDate(result.Document.Metadata.LAST_UPDATE_DATE);
             $scope.lastModifiedUserId = result.Document.Metadata.LAST_UPDATE_USER_NAME;
@@ -154,11 +154,6 @@ angular.module('ecmsEcmsUiApp')
                 });
         };
 
-
-
-        //$rootScope.$on('updateCurrentDocument', function () {
-        //    $scope.updateCurrentDocument();
-        //});
 
 
         /**
@@ -274,11 +269,7 @@ angular.module('ecmsEcmsUiApp')
                 var isOk = updateSearchResults.getResults();
                 if (isOk) {
                     $this.getIdAndGo(indexToFind);
-                    //$scope.loadDoc(indexToFind);
                 }
-                //$scope.updateSearchResults().then(function () {
-                //    $this.getIdAndGo(indexToFind);
-                //});
             }
             // page over for previous
             else if (indexToFind < $rootScope.state.indexRange [0]) {
@@ -286,17 +277,11 @@ angular.module('ecmsEcmsUiApp')
                 var isOk = updateSearchResults.getResults();
                 if (isOk) {
                     $this.getIdAndGo(indexToFind);
-                    //$scope.loadDoc(indexToFind);
                 }
-                //$scope.updateSearchResults().then(function () {
-                //    $this.getIdAndGo(indexToFind);
-                //});
             }
             // no paging over needed, just get document
             else {
                 $this.getIdAndGo(indexToFind);
-                //$scope.loadDoc(indexToFind);
-                //$this.getIdAndGo(indexToFind);
             }
         };
 
@@ -305,10 +290,8 @@ angular.module('ecmsEcmsUiApp')
             $scope.goToId = $this.getAndGoLoop(indexToFind);
             if ($scope.goToId) {
                 $rootScope.state.currentDocument.id = $scope.goToId;
-                //goTo.go('search.doc', {id: $rootScope.state.currentDocument.id});
                 goTo.to('doc', {id: $rootScope.state.currentDocument.id});
             }
-
             // transition complete
             spinner.off();
         };
@@ -359,7 +342,7 @@ angular.module('ecmsEcmsUiApp')
                 // clear out box at top for error feedback
                 $rootScope.state.errorBox = null;
                 // unauthorized
-                $scope.signOut();
+                signOut.out();
             }
 
             // flag for user feedback message
