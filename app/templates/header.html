@@ -43,9 +43,9 @@
                     <a ui-sref="search.results"
                        ng-click="!state.searchResults.length ? $event.preventDefault() : goTo('search.results')">Search</a>
                 </li>
-                <li ng-class="!state.currentDocument.id ? 'disabled' : state.currentView === 'search.doc' ? 'active' : ''">
+                <li ng-class="!state.currentDocument.id ? 'disabled' : state.currentView === 'doc' ? 'active' : ''">
                     <a ui-sref="search.doc({ id: state.currentDocument.id })"
-                       ng-click="!state.currentDocument.id ? $event.preventDefault() : goTo('search.doc')">Document</a></li>
+                       ng-click="!state.currentDocument.id ? $event.preventDefault() : goTo('doc')">Document</a></li>
             </ul>
 
             <!--<ul class="nav navbar-nav navbar-right">

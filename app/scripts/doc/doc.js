@@ -18,6 +18,7 @@ angular.module('ecmsEcmsUiApp')
                                      goTo,
                                      ecmsSession,
                                      spinner,
+                                     $filter,
                                      Restangular,
                                      paramsToString,
                                      RESTAPIversion,
@@ -27,6 +28,7 @@ angular.module('ecmsEcmsUiApp')
         var $this = this;   // alias for this controller
 
         $scope.documentId = $stateParams.id;
+        $rootScope.state.currentDocument.id = $scope.documentId;
 
         $scope.editorOptions = {  // CodeMirror options
             lineWrapping: true,
@@ -99,7 +101,8 @@ angular.module('ecmsEcmsUiApp')
          * @param result
          */
         function getDocumentSuccess(result) {
-            $scope.document = result;
+            $scope.document = result.Document;
+            //$rootScope.state.currentDocument = result.Document;
             $rootScope.state.rawXML = result.Document.Body.value;
             $scope.lastModifiedDate = formatDate(result.Document.Metadata.LAST_UPDATE_DATE);
             $scope.lastModifiedUserId = result.Document.Metadata.LAST_UPDATE_USER_NAME;
@@ -140,7 +143,6 @@ angular.module('ecmsEcmsUiApp')
             Restangular.one(RESTAPIversion + '/documents/' + documentIdForLoad).
                 customGET().
                 then(function (resp) {
-                    var valueReceived = resp;
                     getDocumentSuccess(resp.data);
                     spinner.off();
                 }, function (fail) {
@@ -150,16 +152,13 @@ angular.module('ecmsEcmsUiApp')
                         spinner.off();
                     });
                 });
-
-            //getDocumentService.get($rootScope.state.currentDocument.id)
-            //    .then(getDocumentSuccess, getDocumentError);
         };
 
 
 
-        $rootScope.$on('updateCurrentDocument', function () {
-            $scope.updateCurrentDocument();
-        });
+        //$rootScope.$on('updateCurrentDocument', function () {
+        //    $scope.updateCurrentDocument();
+        //});
 
 
         /**
@@ -206,7 +205,6 @@ angular.module('ecmsEcmsUiApp')
          **********************************************/
 
         // NEXT
-
         $scope.goNext = function () {
             // we're at the end of search results, bail
             if ($rootScope.state.currentDocument.index === $rootScope.state.totalItems) {
@@ -266,7 +264,8 @@ angular.module('ecmsEcmsUiApp')
         // it finds the doc id of the succeeding document id and goes to it
         this.proceedToDocument = function (direction) {
             var indexToFind;
-            indexToFind = direction === 'next' ? $rootScope.state.currentDocument.index + 1 : $rootScope.state.currentDocument.index - 1;
+            indexToFind = direction === 'next' ? $rootScope.state.currentDocument.index + 1 :
+                                                 $rootScope.state.currentDocument.index - 1;
             // in transition
             spinner.on();
             // page over for next
@@ -274,7 +273,8 @@ angular.module('ecmsEcmsUiApp')
                 $rootScope.state.pageNumber = $rootScope.state.pageNumber + 1;
                 var isOk = updateSearchResults.getResults();
                 if (isOk) {
-                    $scope.loadDoc(indexToFind);
+                    $this.getIdAndGo(indexToFind);
+                    //$scope.loadDoc(indexToFind);
                 }
                 //$scope.updateSearchResults().then(function () {
                 //    $this.getIdAndGo(indexToFind);
@@ -285,7 +285,8 @@ angular.module('ecmsEcmsUiApp')
                 $rootScope.state.pageNumber = $rootScope.state.pageNumber - 1;
                 var isOk = updateSearchResults.getResults();
                 if (isOk) {
-                    $scope.loadDoc(indexToFind);
+                    $this.getIdAndGo(indexToFind);
+                    //$scope.loadDoc(indexToFind);
                 }
                 //$scope.updateSearchResults().then(function () {
                 //    $this.getIdAndGo(indexToFind);
@@ -293,7 +294,8 @@ angular.module('ecmsEcmsUiApp')
             }
             // no paging over needed, just get document
             else {
-                $scope.loadDoc(indexToFind);
+                $this.getIdAndGo(indexToFind);
+                //$scope.loadDoc(indexToFind);
                 //$this.getIdAndGo(indexToFind);
             }
         };

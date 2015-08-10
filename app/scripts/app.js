@@ -182,7 +182,7 @@ ecmsApp.run(function ($rootScope,$location, $state, isPrivateService, terminate,
                 $state.go('login');
             }
 
-            if (toState.name === 'search.doc') {
+            if (toState.name === 'doc') {
                 $rootScope.state.currentDocument.id = toParams.id;
             }
         });

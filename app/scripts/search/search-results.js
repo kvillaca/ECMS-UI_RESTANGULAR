@@ -81,10 +81,14 @@ angular.module('ecmsEcmsUiApp')
         };
 
 
-
-        $scope.goTo = function(valueForSeach) {
+        /**
+         * Local goTo
+         * @param valueForSeach
+         * @param selectionId
+         */
+        $scope.goTo = function(valueForSeach, selectionId) {
             toggleFeatures.toggle(valueForSeach);
-            goTo.to(valueForSeach);
+            goTo.to(valueForSeach, selectionId);
         }
 
         /**
