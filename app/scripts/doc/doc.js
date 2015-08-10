@@ -109,26 +109,52 @@ angular.module('ecmsEcmsUiApp')
             });
         }
 
+
+        function getDocumentError(error) {
+            $scope.codeMirrorArea.setValue('Error fetching raw XML.');
+            $timeout(function () {
+                $scope.codeMirrorArea.setOption('readOnly', 'nocursor');
+                $rootScope.state.dirtyRawXML = false;
+            });
+            console.log(error);
+        }
+
+
         /**
          * Updates current document properties in app state
          */
         $scope.updateCurrentDocument = function () {
 
-            function getDocumentError(error) {
-                $scope.codeMirrorArea.setValue('Error fetching raw XML.');
-                $timeout(function () {
-                    $scope.codeMirrorArea.setOption('readOnly', 'nocursor');
-                    $rootScope.state.dirtyRawXML = false;
-                });
-                console.log(error);
-            }
-
             // remove the error box if it was there
             $rootScope.state.errorBox = null;
 
-            getDocumentService.get($rootScope.state.currentDocument.id)
-                .then(getDocumentSuccess, getDocumentError);
+            spinner.on();
+            // Just have added the setDefaultHeaders due after pull the service has stopped to work.
+            // Once it bo back to work it's just remove it!
+            Restangular.setDefaultHeaders({
+                'Content-Type': 'application/json',
+                'X-ECMS-Session': ecmsSession.getSession()
+            });
+
+            Restangular.one(RESTAPIversion + '/documents/' + documentIdForLoad).
+                customGET().
+                then(function (resp) {
+                    var valueReceived = resp;
+                    getDocumentSuccess(resp.data);
+                    spinner.off();
+                }, function (fail) {
+                    $timeout(function () {
+                        $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
+                        getDocumentError(error);
+                        spinner.off();
+                    });
+                });
+
+            //getDocumentService.get($rootScope.state.currentDocument.id)
+            //    .then(getDocumentSuccess, getDocumentError);
         };
+
+
 
         $rootScope.$on('updateCurrentDocument', function () {
             $scope.updateCurrentDocument();
@@ -140,33 +166,37 @@ angular.module('ecmsEcmsUiApp')
          * @param dateIn - date in raw JS format: 2015-06-11T10:22:49.068-05:00
          */
         function formatDate(dateIn) {
-            var rawDate = new Date(dateIn);
-
-            var month = rawDate.getMonth() + 1;
-            if (month < 10) {
-                month = '0' + month;
-            }
-
-            var day = rawDate.getDate();
-            if (day < 10) {
-                day = '0' + day;
-            }
-
-            var hour = rawDate.getHours();
-            var min = rawDate.getMinutes();
-            if (min < 10) {
-                min = '0' + min;
-            }
-            var sec = rawDate.getSeconds();
-            if (sec < 10) {
-                sec = '0' + sec;
-            }
-            var ampm = hour >= 12 ? 'pm' : 'am';
-            hour = hour % 12;       // set it to 12-hour format
-            hour = hour ? hour : 12;    // the hour '0' should be '12'
+            var formatDate = 'MM/dd/yyyy  h:mm:ss a';
+            return $filter('date')(dateIn, formatDate);
 
 
-            return month + '/' + day + '/' + rawDate.getFullYear() + ' ' + hour + ':' + min + ':' + sec + ' ' + ampm;
+            //var rawDate = new Date(dateIn);
+            //
+            //var month = rawDate.getMonth() + 1;
+            //if (month < 10) {
+            //    month = '0' + month;
+            //}
+            //
+            //var day = rawDate.getDate();
+            //if (day < 10) {
+            //    day = '0' + day;
+            //}
+            //
+            //var hour = rawDate.getHours();
+            //var min = rawDate.getMinutes();
+            //if (min < 10) {
+            //    min = '0' + min;
+            //}
+            //var sec = rawDate.getSeconds();
+            //if (sec < 10) {
+            //    sec = '0' + sec;
+            //}
+            //var ampm = hour >= 12 ? 'pm' : 'am';
+            //hour = hour % 12;       // set it to 12-hour format
+            //hour = hour ? hour : 12;    // the hour '0' should be '12'
+            //
+            //
+            //return month + '/' + day + '/' + rawDate.getFullYear() + ' ' + hour + ':' + min + ':' + sec + ' ' + ampm;
         }
 
 
