@@ -302,24 +302,24 @@ angular.module('ecmsEcmsUiApp')
 
         // Finds the doc id that we're trying to go to
         $this.getAndGoLoop = function (indexToFind) {
-            indexToFind--;
-            if (indexToFind < 0) {
-                indexToFind = 0;
-            } else if (indexToFind > $rootScope.state.searchResults.length - 1) {
-                indexToFind = $rootScope.state.searchResults.length - 1;
-            }
-            var row = $rootScope.state.searchResults[indexToFind];
+            //indexToFind--;
+            //if (indexToFind < 0) {
+            //    indexToFind = 0;
+            //} else if (indexToFind > $rootScope.state.searchResults.length - 1) {
+            //    indexToFind = $rootScope.state.searchResults.length - 1;
+            //}
+            //var row = $rootScope.state.searchResults[indexToFind];
             //if (indexToFind !== parseInt(row.searchResultIndex)) {
             //    row.documentid = undefined;
             //}
-            //var row;
-            //for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
-            //    row = $rootScope.state.searchResults[i];
-            //    if (indexToFind !== parseInt(row.searchResultIndex)) {
-            //        continue;
-            //    }
-            //    break;
-            //}
+            var row;
+            for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
+                row = $rootScope.state.searchResults[i];
+                if (indexToFind !== parseInt(row.searchResultIndex)) {
+                    continue;
+                }
+                break;
+            }
             return row.documentid;
         };
 
