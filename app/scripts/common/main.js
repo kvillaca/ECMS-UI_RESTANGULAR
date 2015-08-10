@@ -81,15 +81,14 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.codeMirrorArea = null;
         };
 
-        //$scope.goTo = function(destination) {
-        //    if (destination == 'search.doc') {
-        //        goTo.go(destination, {id: $rootScope.state.currentDocument.id});
-        //    }
-        //    else {
-        //        goTo.go(destination);
-        //    }
-        //
-        //};
+        $scope.goTo = function(destination) {
+            if (destination == 'doc') {
+                goTo.to(destination, {id: $rootScope.state.currentDocument.id});
+            } else {
+                goTo.to(destination);
+            }
+
+        };
 
 
         /*
