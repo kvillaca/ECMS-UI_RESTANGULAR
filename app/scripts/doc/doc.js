@@ -21,6 +21,7 @@ angular.module('ecmsEcmsUiApp')
                                      Restangular,
                                      paramsToString,
                                      RESTAPIversion,
+                                     updateSearchResults,
                                      updateDocumentService) {
 
         var $this = this;   // alias for this controller
@@ -271,22 +272,30 @@ angular.module('ecmsEcmsUiApp')
             // page over for next
             if (indexToFind > $rootScope.state.indexRange [1]) {
                 $rootScope.state.pageNumber = $rootScope.state.pageNumber + 1;
-                $scope.updateSearchResults().then(function () {
-                    $this.getIdAndGo(indexToFind);
-                });
+                var isOk = updateSearchResults.getResults();
+                if (isOk) {
+                    $scope.loadDoc(indexToFind);
+                }
+                //$scope.updateSearchResults().then(function () {
+                //    $this.getIdAndGo(indexToFind);
+                //});
             }
             // page over for previous
             else if (indexToFind < $rootScope.state.indexRange [0]) {
                 $rootScope.state.pageNumber = $rootScope.state.pageNumber - 1;
-                $scope.updateSearchResults().then(function () {
-                    $this.getIdAndGo(indexToFind);
-                });
+                var isOk = updateSearchResults.getResults();
+                if (isOk) {
+                    $scope.loadDoc(indexToFind);
+                }
+                //$scope.updateSearchResults().then(function () {
+                //    $this.getIdAndGo(indexToFind);
+                //});
             }
             // no paging over needed, just get document
             else {
-                $this.getIdAndGo(indexToFind);
+                $scope.loadDoc(indexToFind);
+                //$this.getIdAndGo(indexToFind);
             }
-
         };
 
         // Sets the state with the new doc id and goes for it
@@ -324,37 +333,29 @@ angular.module('ecmsEcmsUiApp')
         function updateDocumentSuccess(response) {
             // clear out box at top for error feedback
             $rootScope.state.errorBox = null;
-
             // flag for user feedback message
             $scope.statusAlert.statusClass = 'alert-success';
             $scope.statusAlert.status = 'Success';
             $scope.statusAlert.alerts = response.userMessage;
-
             // transition complete
             spinner.off();
-
             $scope.document = response.data;
             $rootScope.state.rawXML = $scope.document.Document.Body.value;
             $scope.lastModifiedDate = formatDate($scope.document.Document.Metadata.LAST_UPDATE_DATE);
             $scope.lastModifiedUserId = $scope.document.Document.Metadata.LAST_UPDATE_USER_NAME;
-
             $timeout(function () {
                 $scope.dismissAlert();
             }, 2000);
-
             // update search results grid
-            $scope.updateSearchResults ();
-
+            updateSearchResults.getResults();
             // clean up the form so Save button is inactive again
             $rootScope.state.dirtyRawXML = false;
-
         }
 
         function updateDocumentError(error) {
             if (error.status === 401) {
                 // clear out box at top for error feedback
                 $rootScope.state.errorBox = null;
-
                 // unauthorized
                 $scope.signOut();
             }
@@ -363,25 +364,20 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.statusClass = 'alert-danger alert-dismissible';
             $scope.statusAlert.alerts = error.userMessage;
             $scope.statusAlert.status = 'Error';
-
             // transition complete
             spinner.off();
-
             console.log(error);
         }
 
         $scope.updateDocument = function () {
-
             // if we have nothing to save, just bail
             if (!$scope.isDirty()) {
                 return;
             }
-
             if ($scope.isDirty()) {
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
                 $scope.document.Document.Body.value = $rootScope.state.rawXML;
             }
-
             updateDocumentService.update($scope.document)
                 .then(updateDocumentSuccess, updateDocumentError);
         };
@@ -404,7 +400,6 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.statusClass = 'alert-success';
             $scope.statusAlert.status = 'Success';
             $scope.statusAlert.alerts = response.userMessage;
-
             $timeout(function () {
                 $scope.dismissAlert();
             }, 2000);
@@ -495,7 +490,7 @@ angular.module('ecmsEcmsUiApp')
             // transition complete
             spinner.on();
             // update search results grid
-            $scope.updateSearchResults ();
+            updateSearchResults.getResults();
             $timeout(function () {  // wait for Save to finish; could be done via a promise
                 goTo.to('search.results');
                 $scope.dismissAlert();
@@ -588,7 +583,7 @@ angular.module('ecmsEcmsUiApp')
             // transition complete
             spinner.off();
             // update search results grid
-            $scope.updateSearchResults ();
+            updateSearchResults.getResults();
             $timeout(function () {
                 $scope.dismissAlert();
                 $this.proceedToDocument($scope.successDirection);

@@ -334,3 +334,68 @@ app.service('clearSearchResults', function ($rootScope) {
 });
 
 
+
+app.service('updateSearchResults', function($rootScope, Restangular, paramsToString, ecmsSession, RESTAPIversion,
+                                            goTo, tailorData, clearSearchResults, spinner, searchErrorService){
+    this.getResults = function() {
+        $rootScope.state.errorBox = null;
+        spinner.on();
+        // Just have added the setDefaultHeaders due after pull the service has stopped to work.
+        // Once it bo back to work it's just remove it!
+        Restangular.setDefaultHeaders({
+            'Content-Type': 'application/json',
+            'X-ECMS-Session': ecmsSession.getSession()
+        });
+
+        $rootScope.state.errorMessage = '';
+        $rootScope.state.pageNumber = 1;
+        $rootScope.state.currentDocument = {};
+        $rootScope.state.rawXML = null;
+        $rootScope.state.dirtyRawXML = false;
+        $rootScope.codeMirrorArea = null;
+
+        //$rootScope.state.searchQuery = input;
+
+        var paramsValue = {
+            limit: $rootScope.state.pageSize,
+            offset: ($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize,
+            query: $rootScope.state.searchQuery
+        };
+
+        spinner.on();
+
+        // Just have added the setDefaultHeaders due after pull the service has stopped to work.
+        // Once it bo back to work it's just remove it!
+        Restangular.setDefaultHeaders({
+            'Content-Type': 'application/json',
+            'X-ECMS-Session': ecmsSession.getSession()
+        });
+        Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
+            customGET('DocumentSearch').
+            then(function (resp) {
+                $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
+                $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;
+                if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
+                    $rootScope.state.searchResults = tailorData.data($rootScope.state.searchResults);
+                    $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
+                    $rootScope.$broadcast('resizeGrid');
+                    goTo.to('search.results');
+                } else {
+                    $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
+                    clearSearchResults.clear();
+                    goTo.to('search.input');       // probably temporary
+                }
+                spinner.off();
+                return true;
+            }, function (fail) {
+                $timeout(function () {
+                    $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
+                    clearSearchResults.clear();
+                    goTo.to('search.input');       // probably temporary
+                    console.log(fail);
+                    spinner.off();
+                    return false;
+                });
+            });
+    }
+});

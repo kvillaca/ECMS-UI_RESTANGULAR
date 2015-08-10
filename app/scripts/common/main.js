@@ -20,7 +20,6 @@ angular.module('ecmsEcmsUiApp')
                                       toDefaultState,
                                       gridOptions,
                                       getSearchResultsService,
-                                      searchErrorService,
                                       $q,
                                       $timeout,
                                       terminate,
@@ -79,7 +78,7 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.currentDocument = {};
             $rootScope.state.rawXML = null;
             $rootScope.state.dirtyRawXML = false;
-            $scope.codeMirrorArea = null;
+            $rootScope.codeMirrorArea = null;
         };
 
         //$scope.goTo = function(destination) {
@@ -162,44 +161,67 @@ angular.module('ecmsEcmsUiApp')
          * This is used when changes are made to a document and the search results view grid needs to be updated with those new changes
          * This is an abridged version of submitQuery method
          */
-        /**
-         * @TODO - move to service for global use
-         * @param input
-         */
-        $scope.updateSearchResults = function () {
-
-            var deferred = $q.defer();
-
-            function getSearchResultsSuccess(result) {
-
-                $rootScope.state.searchResults = result.data.DocumentSearch.SearchHit;
-                $rootScope.state.totalItems = result.data.DocumentSearch.TotalHits;
-
-                if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
-                    $rootScope.state.searchResults = tailorData.data($rootScope.state.searchResults);
-                    $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
-                    deferred.resolve($rootScope.state.searchResults);
-                }
-                else {
-                    $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
-                    clearSearchResults.clear();
-                    deferred.reject('updateSearchResults error');
-                }
-            }
-
-            function getSearchResultsError(error) {
-                // error!
-                $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
-                clearSearchResults.clear();
-                console.log(error);
-                deferred.reject(error);
-            }
-
-            getSearchResultsService.getResults($rootScope.state.searchQuery, $rootScope.state.pageNumber, $rootScope.state.pageSize)
-                .then(getSearchResultsSuccess, getSearchResultsError);
-
-            return deferred.promise;
-        };
+        ///**
+        // * @TODO - move to service for global use
+        // * @param input
+        // */
+        //$scope.updateSearchResults = function () {
+        //    //var deferred = $q.defer();
+        //    $rootScope.state.errorBox = null;
+        //    spinner.on();
+        //    // Just have added the setDefaultHeaders due after pull the service has stopped to work.
+        //    // Once it bo back to work it's just remove it!
+        //    Restangular.setDefaultHeaders({
+        //        'Content-Type': 'application/json',
+        //        'X-ECMS-Session': ecmsSession.getSession()
+        //    });
+        //
+        //    Restangular.one(RESTAPIversion + '/documents/' + documentIdForLoad).
+        //        customGET().
+        //        then(function (resp) {
+        //            var valueReceived = resp;
+        //            getDocumentSuccess(resp.data);
+        //            spinner.off();
+        //        }, function (fail) {
+        //            $timeout(function () {
+        //                $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
+        //                clearSearchResults.clear();
+        //                goTo.to('search.input');       // probably temporary
+        //                console.log(fail);
+        //                spinner.off();
+        //            });
+        //        });
+        //
+        //    function getSearchResultsSuccess(result) {
+        //
+        //        $rootScope.state.searchResults = result.data.DocumentSearch.SearchHit;
+        //        $rootScope.state.totalItems = result.data.DocumentSearch.TotalHits;
+        //
+        //        if ($rootScope.state.searchResults && $rootScope.state.searchResults.length) {
+        //            $rootScope.state.searchResults = tailorData.data($rootScope.state.searchResults);
+        //            $rootScope.state.indexRange = [($rootScope.state.pageNumber - 1) * $rootScope.state.pageSize + 1, Math.min($rootScope.state.pageNumber * $rootScope.state.pageSize, $rootScope.state.totalItems)];
+        //            deferred.resolve($rootScope.state.searchResults);
+        //        }
+        //        else {
+        //            $rootScope.state.errorMessage = searchErrorService.getErrorMessage('noResultsFound');
+        //            clearSearchResults.clear();
+        //            deferred.reject('updateSearchResults error');
+        //        }
+        //    }
+        //
+        //    function getSearchResultsError(error) {
+        //        // error!
+        //        $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
+        //        clearSearchResults.clear();
+        //        console.log(error);
+        //        deferred.reject(error);
+        //    }
+        //
+        //    //getSearchResultsService.getResults($rootScope.state.searchQuery, $rootScope.state.pageNumber, $rootScope.state.pageSize)
+        //    //    .then(getSearchResultsSuccess, getSearchResultsError);
+        //
+        //    //return deferred.promise;
+        //};
 
 
         $scope.signOut = function () {

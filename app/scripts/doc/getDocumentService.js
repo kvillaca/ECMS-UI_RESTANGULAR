@@ -7,8 +7,8 @@
  */
 
 
-angular.module('ecmsEcmsUiApp')
-    .service('getDocumentService', function ($http, $q, documentsEndpoint, ecmsSession) {
+//angular.module('ecmsEcmsUiApp')
+//    .service('getDocumentService', function ($http, $q, documentsEndpoint, ecmsSession) {
         //this.get = function (id) {
         //
         //    var deferred = $q.defer();
@@ -30,4 +30,4 @@ angular.module('ecmsEcmsUiApp')
         //    return deferred.promise;
         //
         //};
-    });
+    //});

@@ -12,7 +12,6 @@ angular.module('ecmsEcmsUiApp')
                                              toggleFeatures,
                                              ecmsSession,
                                              updateSession,
-                                             getSearchResultsService,
                                              searchErrorService,
                                              goTo,
                                              paramsToString,
@@ -106,7 +105,6 @@ angular.module('ecmsEcmsUiApp')
                         spinner.off();
                     });
                 });
-            //}
         };
 
 
