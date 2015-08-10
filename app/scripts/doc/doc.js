@@ -11,7 +11,6 @@ angular.module('ecmsEcmsUiApp')
     .controller('DocCtrl', function ($scope,
                                      $modal,
                                      modalHTML,
-                                     getDocumentService,
                                      $rootScope,
                                      $window,
                                      $timeout,
@@ -51,6 +50,7 @@ angular.module('ecmsEcmsUiApp')
 
         $scope.loadDoc = function(documentIdForLoad) {
 
+            $rootScope.state.errorBox = null;
             spinner.on();
             // Just have added the setDefaultHeaders due after pull the service has stopped to work.
             // Once it bo back to work it's just remove it!
@@ -207,7 +207,6 @@ angular.module('ecmsEcmsUiApp')
         // NEXT
 
         $scope.goNext = function () {
-
             // we're at the end of search results, bail
             if ($rootScope.state.currentDocument.index === $rootScope.state.totalItems) {
                 return;
@@ -215,10 +214,8 @@ angular.module('ecmsEcmsUiApp')
 
             if ($scope.isDirty()) {
                 // we have unsaved changes so grab them and load modal
-
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
                 $scope.document.Document.Body.value = $rootScope.state.rawXML;
-
                 $scope.modal('next');
                 return;
             }
@@ -234,10 +231,9 @@ angular.module('ecmsEcmsUiApp')
             $scope.goNext();
         });
 
+
         // PREV
-
         $scope.goPrev = function () {
-
             // we're at the very beginning of search results, bail
             if ($rootScope.state.currentDocument.index === 1) {
                 return;
@@ -245,10 +241,8 @@ angular.module('ecmsEcmsUiApp')
 
             if ($scope.isDirty()) {
                 // we have unsaved changes so grab them and load modal
-
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
                 $scope.document.Document.Body.value = $rootScope.state.rawXML;
-
                 $scope.modal('prev');
                 return;
             }
@@ -270,14 +264,10 @@ angular.module('ecmsEcmsUiApp')
         // this is the callback function after navigating away from a document
         // it finds the doc id of the succeeding document id and goes to it
         this.proceedToDocument = function (direction) {
-
             var indexToFind;
-
             indexToFind = direction === 'next' ? $rootScope.state.currentDocument.index + 1 : $rootScope.state.currentDocument.index - 1;
-
             // in transition
             spinner.on();
-
             // page over for next
             if (indexToFind > $rootScope.state.indexRange [1]) {
                 $rootScope.state.pageNumber = $rootScope.state.pageNumber + 1;
@@ -315,7 +305,6 @@ angular.module('ecmsEcmsUiApp')
         // Finds the doc id that we're trying to go to
         $this.getAndGoLoop = function (indexToFind) {
             var row;
-
             for (var i = 0; i < $rootScope.state.searchResults.length; i++) {
                 row = $rootScope.state.searchResults[i];
                 if (indexToFind !== parseInt(row.searchResultIndex)) {
@@ -332,10 +321,7 @@ angular.module('ecmsEcmsUiApp')
         /******************************************
          * UPDATE (save document)
          *****************************************/
-
-
         function updateDocumentSuccess(response) {
-
             // clear out box at top for error feedback
             $rootScope.state.errorBox = null;
 
@@ -365,9 +351,7 @@ angular.module('ecmsEcmsUiApp')
         }
 
         function updateDocumentError(error) {
-
             if (error.status === 401) {
-
                 // clear out box at top for error feedback
                 $rootScope.state.errorBox = null;
 
@@ -412,9 +396,7 @@ angular.module('ecmsEcmsUiApp')
         /********************************************
          * VALIDATE
          ********************************************/
-
         function validateSuccess(response) {
-
             // transition complete
             spinner.off();
 
@@ -428,32 +410,29 @@ angular.module('ecmsEcmsUiApp')
             }, 2000);
         }
 
+
         function validateError(error) {
             console.log(error);
-
             // transition complete
             spinner.off();
-
             $scope.statusAlert.statusClass = 'alert-danger alert-dismissible';
             $scope.statusAlert.alerts = error.userMessage;
             $scope.statusAlert.status = 'Error';
-
             return error;
         }
 
-        $scope.validateDocument = function () {
 
+        $scope.validateDocument = function () {
             // clear out box at top for error feedback
             $rootScope.state.errorBox = null;
-
             if ($scope.isDirty()) {
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
                 $scope.document.Document.Body.value = $rootScope.state.rawXML;
             }
-
             updateDocumentService.validate($scope.document)
                 .then(validateSuccess, validateError);
         };
+
 
         // subscription event listening for a click on the action bar in header
         $rootScope.$on('validateDocument', function () {
@@ -465,28 +444,22 @@ angular.module('ecmsEcmsUiApp')
         /******************************************
          * RELOAD
          ******************************************/
-
         function reloadDocumentSuccess(result) {
             getDocumentSuccess(result);
-
             // transition complete
             spinner.off();
-
             // flag for user feedback message
             $scope.statusAlert.statusClass = 'alert-success';
             $scope.statusAlert.status = 'Success';
             $scope.statusAlert.alerts = ['Document was reloaded successfully.'];
-
             $timeout(function () {
                 $scope.dismissAlert();
             }, 2000);
         }
 
         function reloadDocumentError(error) {
-
             // transition complete
             spinner.off();
-
             $scope.statusAlert.statusClass = 'alert-danger alert-dismissible';
             $scope.statusAlert.alerts = ['There was an error in reloading your file. Please try again or contact system administrator if you can\'t reload the file'];
             $scope.statusAlert.status = 'Error';
@@ -497,12 +470,11 @@ angular.module('ecmsEcmsUiApp')
         // on reloading a document, this checks if the editor has been touched
         // if yes, the modal alert is triggered
         $scope.reloadDocument = function () {
-
             // clear out box at top for error feedback
-            $rootScope.state.errorBox = null;
-
-            getDocumentService.get($rootScope.state.currentDocument.id)
-                .then(reloadDocumentSuccess, reloadDocumentError);
+            //$rootScope.state.errorBox = null;
+            loadDoc();
+            //getDocumentService.get($rootScope.state.currentDocument.id)
+            //    .then(reloadDocumentSuccess, reloadDocumentError);
         };
 
         // subscription event listening for a click on the action bar in header
@@ -517,31 +489,24 @@ angular.module('ecmsEcmsUiApp')
          *************************************/
 
         function closeDocumentSuccess(response) {
-
             $scope.statusAlert.statusClass = 'alert-success';
             $scope.statusAlert.status = 'Success';
             $scope.statusAlert.alerts = response.userMessage;
-
             // transition complete
             spinner.on();
-
             // update search results grid
             $scope.updateSearchResults ();
-
             $timeout(function () {  // wait for Save to finish; could be done via a promise
                 goTo.to('search.results');
                 $scope.dismissAlert();
             }, 2400);
-
         }
 
         function closeDocumentError(error) {
-
             // flag for user feedback message
             $scope.statusAlert.statusClass = 'alert-danger alert-dismissible';
             $scope.statusAlert.alerts = error.userMessage;
             $scope.statusAlert.status = 'Error';
-
             // transition complete
             spinner.on();
         }
@@ -549,20 +514,18 @@ angular.module('ecmsEcmsUiApp')
         // on closing a document, this checks if the editor has been touched
         // if yes, the modal alert is triggered
         $scope.closeDocument = function () {
-
             if (!$scope.isDirty()) {
                 goTo.to('search.results');
                 return;
             }
-
             if ($scope.isDirty()) {
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
                 $scope.document.Document.Body.value = $rootScope.state.rawXML;
             }
-
             // we have unsaved changes so trigger the modal alert for close
             $scope.modal('close');
         };
+
 
         // subscription event listening for a click on the action bar in header
         $rootScope.$on('closeDocument', function () {
@@ -575,39 +538,30 @@ angular.module('ecmsEcmsUiApp')
         /*********************************************
          * Modal
          *********************************************/
-
         // triggers the modal alert
         // and handles response from user
         $scope.modal = function (callbackLabel) {
-
             var modalInstance = $modal.open($this.determineModalHTML(callbackLabel));
-
             modalInstance.result.then(function () {
                 // Modal OK
-
                 // in transition
                 spinner.on();
-
                 if (callbackLabel === 'close') {
                     updateDocumentService.update($scope.document)
                         .then(closeDocumentSuccess, closeDocumentError);
                 }
-
                 if (callbackLabel === 'next' || callbackLabel === 'prev') {
                     $scope.successDirection = callbackLabel;
                     updateDocumentService.update($scope.document)
                         .then(goToDocumentSuccess, goToDocumentError);
                 }
-
             }, function (reason) {
                 // Modal Cancel
                 if (reason === 'cancel') {
                     $rootScope.state.dirtyRawXML = false;
-
                     if (callbackLabel === 'close') {
                         goTo.to('search.results');
                     }
-
                     if (callbackLabel === 'next' || callbackLabel === 'prev') {
                         $this.proceedToDocument(callbackLabel);
                         $timeout(function () {
@@ -618,26 +572,23 @@ angular.module('ecmsEcmsUiApp')
             });
         };
 
+
         this.determineModalHTML = function (callbackLabel) {
             if (callbackLabel === 'prev' || callbackLabel === 'next') {
                 return modalHTML.navigate;
             }
-
             return modalHTML[callbackLabel];
         };
 
-        function goToDocumentSuccess(response) {
 
+        function goToDocumentSuccess(response) {
             $scope.statusAlert.statusClass = 'alert-success';
             $scope.statusAlert.status = 'Success';
             $scope.statusAlert.alerts = response.userMessage;
-
             // transition complete
             spinner.off();
-
             // update search results grid
             $scope.updateSearchResults ();
-
             $timeout(function () {
                 $scope.dismissAlert();
                 $this.proceedToDocument($scope.successDirection);
@@ -646,12 +597,10 @@ angular.module('ecmsEcmsUiApp')
         }
 
         function goToDocumentError(error) {
-
             // flag for user feedback message
             $scope.statusAlert.statusClass = 'alert-danger alert-dismissible';
             $scope.statusAlert.alerts = error.userMessage;
             $scope.statusAlert.status = 'Error';
-
             // transition complete
             spinner.off();
         }
@@ -661,15 +610,12 @@ angular.module('ecmsEcmsUiApp')
          * Clears out the user alert box
          */
         $scope.dismissAlert = function () {
-
             // see if there's an error to show to user after they click out of the alert
             if ($scope.statusAlert.status === 'Error') {
                 angular.element($window).scrollTop(0);
                 $rootScope.state.errorBox = $scope.statusAlert;
             }
-
             // clear our alert
             $scope.statusAlert = {};
         };
-
     });

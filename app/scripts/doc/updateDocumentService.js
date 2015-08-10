@@ -89,28 +89,23 @@ angular.module('ecmsEcmsUiApp')
             },
             // validate whole document
             validate: function (request) {
-
                 var deferred = $q.defer();
 
                 function validateSuccess (result) {
-
                     result.userMessage = new Array ('Document passed validation.');
                     deferred.resolve(result);
                 }
 
                 // on Error, create the error messages that will be shown to the user
                 function validateError (error) {
-
                     deferred.reject(validateErrorBase(error));
                 }
 
                 Restangular.one (RESTAPIversion + '/methods/document/validate', request)
                     .then(validateSuccess, validateError);
-
                 return deferred.promise;
-
             }
-            // used for Save and Exit - is this needed? Use update above instead!
+                        // used for Save and Exit - is this needed? Use update above instead!
             /*close: function (request) {
 
                 var deferred = $q.defer();
