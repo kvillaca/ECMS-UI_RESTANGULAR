@@ -336,7 +336,7 @@ app.service('clearSearchResults', function ($rootScope) {
 
 
 app.service('updateSearchResults', function($rootScope, Restangular, paramsToString, ecmsSession, RESTAPIversion,
-                                            goTo, tailorData, clearSearchResults, spinner, searchErrorService){
+                                            goTo, tailorData, clearSearchResults, spinner, searchErrorService, $timeout){
     this.getResults = function() {
         $rootScope.state.errorBox = null;
         spinner.on();
@@ -396,5 +396,5 @@ app.service('updateSearchResults', function($rootScope, Restangular, paramsToStr
                     return false;
                 });
             });
-    }
+    };
 });

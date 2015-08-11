@@ -81,7 +81,7 @@ angular.module('ecmsEcmsUiApp')
         };
 
         $scope.goTo = function(destination) {
-            if (destination == 'doc') {
+            if (destination === 'doc') {
                 goTo.to(destination, {id: $rootScope.state.currentDocument.id});
             } else {
                 goTo.to(destination);

@@ -25,7 +25,9 @@ angular.module('ecmsEcmsUiApp')
                                      RESTAPIversion,
                                      updateSearchResults,
                                      updateDocumentInfo,
-                                     updateDocumentService) {
+                                     updateDocumentService,
+                                     searchErrorService,
+                                     clearSearchResults) {
 
         var $this = this;   // alias for this controller
 
@@ -46,7 +48,7 @@ angular.module('ecmsEcmsUiApp')
         $scope.initDoc = function() {
             // If we are going to create a new document, we should not do anything if the user doesn't have
             // selected a doc number, so we have a if
-            if ($scope.documentId != undefined && $scope.documentId != '' && $scope.documentId.length > 0) {
+            if ($scope.documentId !== undefined && $scope.documentId !== '' && $scope.documentId.length > 0) {
                 $scope.loadDoc($scope.documentId, true);
             }
         };
@@ -69,7 +71,7 @@ angular.module('ecmsEcmsUiApp')
             Restangular.one(RESTAPIversion + '/documents/' + encodedId).
                 customGET().
                 then(function (resp) {
-                    var valueReceived = resp;
+                    //var valueReceived = resp;
                     getDocumentSuccess(resp.data);
                     updateDocumentInfo.update(documentIdForLoad);
                     spinner.off();
@@ -144,7 +146,7 @@ angular.module('ecmsEcmsUiApp')
                 'X-ECMS-Session': ecmsSession.getSession()
             });
 
-            Restangular.one(RESTAPIversion + '/documents/' + documentIdForLoad).
+            Restangular.one(RESTAPIversion + '/documents/' + documentIdForLoad).    // documentIdForLoad is undefined!!!
                 customGET().
                 then(function (resp) {
                     getDocumentSuccess(resp.data);
@@ -152,7 +154,7 @@ angular.module('ecmsEcmsUiApp')
                 }, function (fail) {
                     $timeout(function () {
                         $rootScope.state.errorMessage = searchErrorService.getErrorMessage('badHeaders');
-                        getDocumentError(error);
+                        getDocumentError(fail);
                         spinner.off();
                     });
                 });
@@ -165,8 +167,8 @@ angular.module('ecmsEcmsUiApp')
          * @param dateIn - date in raw JS format: 2015-06-11T10:22:49.068-05:00
          */
         function formatDate(dateIn) {
-            var formatDate = 'MM/dd/yyyy  h:mm:ss a';
-            return $filter('date')(dateIn, formatDate);
+            var format = 'MM/dd/yyyy  h:mm:ss a';
+            return $filter('date')(dateIn, format);
 
 
             //var rawDate = new Date(dateIn);
@@ -213,7 +215,7 @@ angular.module('ecmsEcmsUiApp')
             if ($scope.isDirty()) {
                 // we have unsaved changes so grab them and load modal
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
-                $scope.document.Document.Body.value = $rootScope.state.rawXML;
+                $scope.document.Body.value = $rootScope.state.rawXML;
                 $scope.modal('next');
                 return;
             }
@@ -240,7 +242,7 @@ angular.module('ecmsEcmsUiApp')
             if ($scope.isDirty()) {
                 // we have unsaved changes so grab them and load modal
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
-                $scope.document.Document.Body.value = $rootScope.state.rawXML;
+                $scope.document.Body.value = $rootScope.state.rawXML;
                 $scope.modal('prev');
                 return;
             }
@@ -346,7 +348,7 @@ angular.module('ecmsEcmsUiApp')
                 // clear out box at top for error feedback
                 $rootScope.state.errorBox = null;
                 // unauthorized
-                signOut.out();
+                signout.out();
             }
 
             // flag for user feedback message
@@ -365,9 +367,9 @@ angular.module('ecmsEcmsUiApp')
             }
             if ($scope.isDirty()) {
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
-                $scope.document.Document.Body.value = $rootScope.state.rawXML;
+                $scope.document.Body.value = $rootScope.state.rawXML;
             }
-            updateDocumentService.update($scope.document)
+            updateDocumentService.update({Document: $scope.document})
                 .then(updateDocumentSuccess, updateDocumentError);
         };
 
@@ -411,9 +413,9 @@ angular.module('ecmsEcmsUiApp')
             $rootScope.state.errorBox = null;
             if ($scope.isDirty()) {
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
-                $scope.document.Document.Body.value = $rootScope.state.rawXML;
+                $scope.document.Body.value = $rootScope.state.rawXML;
             }
-            updateDocumentService.validate($scope.document)
+            updateDocumentService.validate({Document: $scope.document})
                 .then(validateSuccess, validateError);
         };
 
@@ -428,7 +430,7 @@ angular.module('ecmsEcmsUiApp')
         /******************************************
          * RELOAD
          ******************************************/
-        function reloadDocumentSuccess(result) {
+        /*function reloadDocumentSuccess(result) {
             getDocumentSuccess(result);
             // transition complete
             spinner.off();
@@ -448,7 +450,7 @@ angular.module('ecmsEcmsUiApp')
             $scope.statusAlert.alerts = ['There was an error in reloading your file. Please try again or contact system administrator if you can\'t reload the file'];
             $scope.statusAlert.status = 'Error';
             return error;
-        }
+        }*/
 
         // executes when Reload button is clicked
         // on reloading a document, this checks if the editor has been touched
@@ -456,7 +458,7 @@ angular.module('ecmsEcmsUiApp')
         $scope.reloadDocument = function () {
             // clear out box at top for error feedback
             //$rootScope.state.errorBox = null;
-            loadDoc();
+            $scope.loadDoc($scope.documentId);
             //getDocumentService.get($rootScope.state.currentDocument.id)
             //    .then(reloadDocumentSuccess, reloadDocumentError);
         };
@@ -504,7 +506,7 @@ angular.module('ecmsEcmsUiApp')
             }
             if ($scope.isDirty()) {
                 $rootScope.state.rawXML = $scope.codeMirrorArea.getValue();
-                $scope.document.Document.Body.value = $rootScope.state.rawXML;
+                $scope.document.Body.value = $rootScope.state.rawXML;
             }
             // we have unsaved changes so trigger the modal alert for close
             $scope.modal('close');
@@ -531,12 +533,12 @@ angular.module('ecmsEcmsUiApp')
                 // in transition
                 spinner.on();
                 if (callbackLabel === 'close') {
-                    updateDocumentService.update($scope.document)
+                    updateDocumentService.update({Document: $scope.document})
                         .then(closeDocumentSuccess, closeDocumentError);
                 }
                 if (callbackLabel === 'next' || callbackLabel === 'prev') {
                     $scope.successDirection = callbackLabel;
-                    updateDocumentService.update($scope.document)
+                    updateDocumentService.update({Document: $scope.document})
                         .then(goToDocumentSuccess, goToDocumentError);
                 }
             }, function (reason) {

@@ -14,8 +14,7 @@ angular.module('ecmsEcmsUiApp')
                                                 validateEndpoint,
                                                 ecmsSession,
                                                 Restangular,
-                                                RESTAPIversion,
-                                                paramsToString) {
+                                                RESTAPIversion) {
 
 
         function validateErrorBase(error) {
@@ -27,7 +26,7 @@ angular.module('ecmsEcmsUiApp')
             for (var event in error.data.DocumentValidation) {
                 if (event !== 'VocabularyEvent') {
                     for (var e in error.data.DocumentValidation[event]) {
-                        error.userMessage.push (error.data.DocumentValidation[event][e].Message);
+                        error.userMessage.push(error.data.DocumentValidation[event][e].Message);
                     }
                 }
                 else {
@@ -38,7 +37,7 @@ angular.module('ecmsEcmsUiApp')
                         if (error.data.DocumentValidation[event][j].NonPreferredTerm && error.data.DocumentValidation[event][j].PreferredTerm) {
                             message = message + ' "' + error.data.DocumentValidation[event][j].NonPreferredTerm.Search + '". Preferred term found: "' + error.data.DocumentValidation[event][j].PreferredTerm.Display + '"';
                         }
-                        error.userMessage.push (message);
+                        error.userMessage.push(message);
                     }
                 }
             }
@@ -47,36 +46,36 @@ angular.module('ecmsEcmsUiApp')
         }
 
 
-
         return {
             // updates existing document. Also validates XML and some other properties not including indexing.
             update: function (request) {
 
                 var deferred = $q.defer();
 
-                function updateSuccess (result) {
-                    result.userMessage = new Array ('Document saved.');
+                function updateSuccess(result) {
+                    result.userMessage = new Array('Document saved.');
                     deferred.resolve(result);
                 }
 
-                function updateError (error) {
+                function updateError(error) {
 
                     error.statusClass = 'alert-danger alert-dismissible';
-                    error.userMessage = new Array ('Server error.');
+                    error.userMessage = new Array('Server error.');
 
                     deferred.reject(error);
                 }
 
-                function validateSuccess () {
+                function validateSuccess() {
 
                     // now Update
                     //$http(config).then(updateSuccess, updateError);
-                    Restangular.one(RESTAPIversion + '/documents', request.Document.DocumentId).customPUT(request)
+                    Restangular.all(RESTAPIversion + '/documents/' + encodeURIComponent(request.Document.DocumentId))
+                        .customPUT (request)
                         .then(updateSuccess, updateError);
+
                 }
 
-                function validateError (error) {
-
+                function validateError(error) {
                     deferred.reject(validateErrorBase(error));
                 }
 
@@ -91,58 +90,59 @@ angular.module('ecmsEcmsUiApp')
             validate: function (request) {
                 var deferred = $q.defer();
 
-                function validateSuccess (result) {
-                    result.userMessage = new Array ('Document passed validation.');
+                function validateSuccess(result) {
+                    result.userMessage = new Array('Document passed validation.');
                     deferred.resolve(result);
                 }
 
                 // on Error, create the error messages that will be shown to the user
-                function validateError (error) {
+                function validateError(error) {
                     deferred.reject(validateErrorBase(error));
                 }
 
-                Restangular.one (RESTAPIversion + '/methods/document/validate', request)
+                Restangular.all(RESTAPIversion + '/methods/document/validate')
+                    .customPOST (request)
                     .then(validateSuccess, validateError);
                 return deferred.promise;
             }
-                        // used for Save and Exit - is this needed? Use update above instead!
+            // used for Save and Exit - is this needed? Use update above instead!
             /*close: function (request) {
 
-                var deferred = $q.defer();
+             var deferred = $q.defer();
 
-                function updateSuccess (result) {
-                    result.userMessage = new Array ('Document saved.');
-                    deferred.resolve(result);
-                }
+             function updateSuccess (result) {
+             result.userMessage = new Array ('Document saved.');
+             deferred.resolve(result);
+             }
 
-                function updateError (error) {
+             function updateError (error) {
 
-                    error.statusClass = 'alert-danger alert-dismissible';
-                    error.userMessage = new Array ('Server error.');
+             error.statusClass = 'alert-danger alert-dismissible';
+             error.userMessage = new Array ('Server error.');
 
-                    deferred.reject(error);
-                }
+             deferred.reject(error);
+             }
 
-                function validateSuccess () {
+             function validateSuccess () {
 
-                    // now Update
-                    //$http(config).then(updateSuccess, updateError);
-                    Restangular.one(RESTAPIversion + '/documents', request.Document.DocumentId).customPUT(request)
-                        .then(updateSuccess, updateError);
+             // now Update
+             //$http(config).then(updateSuccess, updateError);
+             Restangular.one(RESTAPIversion + '/documents', request.Document.DocumentId).customPUT(request)
+             .then(updateSuccess, updateError);
 
-                }
+             }
 
-                function validateError (error) {
-                    deferred.reject(validateErrorBase(error));
-                }
+             function validateError (error) {
+             deferred.reject(validateErrorBase(error));
+             }
 
-                // try to validate indexing first
-                // if validation is successful validateSuccess will perform the update call
-                this.validate(request)
-                    .then(validateSuccess, validateError);
+             // try to validate indexing first
+             // if validation is successful validateSuccess will perform the update call
+             this.validate(request)
+             .then(validateSuccess, validateError);
 
-                return deferred.promise;
-            }*/
+             return deferred.promise;
+             }*/
         };
 
     });
