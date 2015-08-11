@@ -11,7 +11,7 @@ describe('Controller: FooterCtrl', function () {
     // load the controller's module
     beforeEach(module('ecmsEcmsUiApp'));
 
-
+/*
     // Inject the mock providers
     beforeEach(inject(function ($controller,
                                 $rootScope,
@@ -44,7 +44,7 @@ describe('Controller: FooterCtrl', function () {
         it('should return false', function () {
             expect(scope.isExternal('/editor')).toBeFalsy();
         });
-    });
+    });*/
 
 
 });

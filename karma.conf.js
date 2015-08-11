@@ -40,6 +40,8 @@ module.exports = function (config) {
             'bower_components/codemirror/mode/xml/xml.js',
             'bower_components/angular-ui-codemirror/ui-codemirror.js',
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+            'bower_components/restangular/dist/restangular.js',
+            'bower_components/underscore/underscore.js',
 
             'app/scripts/app.js',
             'app/scripts/**/*.js',

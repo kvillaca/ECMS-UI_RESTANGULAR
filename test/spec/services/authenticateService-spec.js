@@ -21,7 +21,7 @@ describe('Service: authenticateService', function () {
         });
     }));
 
-    beforeEach(inject(function ($injector) {
+    /*beforeEach(inject(function ($injector) {
         service = $injector.get('authenticateService');
         $httpBackend = $injector.get('$httpBackend');
     }));
@@ -68,6 +68,6 @@ describe('Service: authenticateService', function () {
     afterEach(function () {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
-    });
+    });*/
 
 });

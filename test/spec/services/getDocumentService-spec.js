@@ -23,7 +23,7 @@ describe('Service: getDocumentService', function () {
         });
     }));
 
-    beforeEach(inject(function ($injector) {
+    /*beforeEach(inject(function ($injector) {
 
         authService.sessionKey = '123';
 
@@ -38,7 +38,7 @@ describe('Service: getDocumentService', function () {
         it('should fetch data', function () {
 
             $httpBackend.expectGET('/ecms/rest/v1/documents/' + mockId, {
-                'X-ECMS-Session':authService.sessionKey, 'Accept': 'application/json, text/plain, */*'
+                'X-ECMS-Session':authService.sessionKey, 'Accept': 'application/json, text/plain, *!/!*'
             }).respond(200,
                 {
                     limit: 10
@@ -63,7 +63,7 @@ describe('Service: getDocumentService', function () {
         it('should error out', function () {
 
             $httpBackend.expectGET('/ecms/rest/v1/documents/' + mockId, {
-                'X-ECMS-Session':authService.sessionKey, 'Accept': 'application/json, text/plain, */*'
+                'X-ECMS-Session':authService.sessionKey, 'Accept': 'application/json, text/plain, *!/!*'
             }).respond(500,
                 {
                     error: 'somethng went wrong'
@@ -88,6 +88,6 @@ describe('Service: getDocumentService', function () {
     afterEach(function () {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
-    });
+    });*/
 
 });

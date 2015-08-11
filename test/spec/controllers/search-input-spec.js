@@ -9,7 +9,7 @@ describe('Controller: SearchInputCtrl', function () {
 
     beforeEach(module('ecmsEcmsUiApp'));
 
-    beforeEach(inject(function ($controller,
+    /*beforeEach(inject(function ($controller,
                                 $rootScope) {
         rootScope = $rootScope;
         searchCtrlScope = rootScope.$new();
@@ -42,7 +42,7 @@ describe('Controller: SearchInputCtrl', function () {
             expect(searchCtrlScope.state.searchQuery).toEqual ('');
             expect(searchCtrlScope.state.errorMessage).toEqual ('');
         });
-    });
+    });*/
 
 
 });

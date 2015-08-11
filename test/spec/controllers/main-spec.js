@@ -13,7 +13,7 @@ describe('Controller: MainCtrl', function () {
     beforeEach(module('ecmsEcmsUiApp'));
 
 
-    // Inject the mock providers
+    /*// Inject the mock providers
     beforeEach(inject(function ($controller,
                                 $rootScope,
                                 _authenticateService_,
@@ -74,7 +74,7 @@ describe('Controller: MainCtrl', function () {
         });
 
     });
-
+*/
 
 });
 

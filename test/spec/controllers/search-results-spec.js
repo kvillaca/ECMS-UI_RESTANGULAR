@@ -8,7 +8,7 @@ describe('Controller: SearchResultsCtrl', function () {
 
     beforeEach(module('ecmsEcmsUiApp'));
 
-    beforeEach(inject(function ($controller,
+    /*beforeEach(inject(function ($controller,
                                 $rootScope) {
         rootScope = $rootScope;
         scope = rootScope.$new();
@@ -48,7 +48,7 @@ describe('Controller: SearchResultsCtrl', function () {
             expect(scope.gridOptions.paginationCurrentPage).toEqual(3);
             expect(scope.state.searchResults).toEqual([{something: 'something'}]);
         });
-    });
+    });*/
 
 });
 

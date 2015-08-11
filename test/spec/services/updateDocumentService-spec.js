@@ -17,7 +17,7 @@ describe('Service: updateDocumentService', function () {
      * @link https://github.com/meanjs/mean/issues/198
      * @link http://stackoverflow.com/questions/23655307/ui-router-interfers-with-httpbackend-unit-test-angular-js/23670198#23670198
      */
-    beforeEach(module(function ($urlRouterProvider) {
+    /*beforeEach(module(function ($urlRouterProvider) {
         $urlRouterProvider.otherwise(function () {
             return false;
         });
@@ -151,6 +151,6 @@ describe('Service: updateDocumentService', function () {
     afterEach(function () {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
-    });
+    });*/
 
 });
