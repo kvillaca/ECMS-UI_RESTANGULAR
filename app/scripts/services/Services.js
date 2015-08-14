@@ -9,6 +9,7 @@
  * */
 var app = angular.module('ecmsEcmsUiApp');
 
+
 /**
  * Save state to session
  */
@@ -20,7 +21,7 @@ app.service('updateSession', function ($sessionStorage) {
 
 
 /**
- * Terminate
+ * Terminate the app
  */
 app.service('terminate', function ($rootScope, $sessionStorage, ecmsSession, updateRestangularHeaders, toDefaultState, updateSession) {
     return function () {
@@ -75,8 +76,8 @@ app.service('toggleFeatures', function ($rootScope, $state, updateSession, toDef
 });
 
 
-/*
- * Redirect, to try avoid $broadcast and $on
+/**
+ * goTo, redirect the URL for $urlRouterProvider
  */
 app.service('goTo', function ($rootScope, $state, updateDocumentInfo, $window, toggleFeatures) {
     this.to = function (toState, toParams) {
@@ -100,6 +101,9 @@ app.service('goTo', function ($rootScope, $state, updateDocumentInfo, $window, t
 });
 
 
+/**
+ * Update the document information
+ */
 app.service('updateDocumentInfo', function ($rootScope) {
     this.update = function (id) {
         $rootScope.state.currentDocument.id = id;
@@ -111,12 +115,12 @@ app.service('updateDocumentInfo', function ($rootScope) {
                 break;
             }
         }
-        //return scope;
     };
 });
 
+
 /**
- * Session - Get and Set.
+ * Session from/to $sessionStorage - Get and Set.
  */
 app.service('ecmsSession', function ($sessionStorage) {
     this.getSession = function () {
@@ -162,7 +166,6 @@ app.service('isPrivateService', function (ecmsSession) {
  * @name ecmsEcmsUiApp.service:getIPService
  * @description retrieves data from the search endpoint
  */
-
 app.service('getIPService', function ($http, $q) {
     return {
         getIP: function () {
@@ -263,9 +266,9 @@ app.service('signout', function ($rootScope, $sessionStorage, terminate, $state,
 });
 
 
-///**
-// * All to default state
-// */
+/**
+ * Reset $rootScope.state
+ */
 app.service('toDefaultState', function ($rootScope, gridOptions) {
     return {
         setToDefaultState: function () {
@@ -289,6 +292,8 @@ app.service('toDefaultState', function ($rootScope, gridOptions) {
         }
     };
 });
+
+
 /**
  * @ngdoc function
  * @name ecmsEcmsUiApp.service:updateRestangularHeaders
@@ -306,6 +311,7 @@ app.service('paramsToString', function () {
         }
     };
 });
+
 
 /**
  * @ngdoc function
@@ -334,7 +340,9 @@ app.service('clearSearchResults', function ($rootScope) {
 });
 
 
-
+/**
+ * Restangular update search
+ */
 app.service('updateSearchResults', function($rootScope, Restangular, paramsToString, ecmsSession, RESTAPIversion,
                                             goTo, tailorData, clearSearchResults, spinner, searchErrorService, $timeout){
     this.getResults = function() {

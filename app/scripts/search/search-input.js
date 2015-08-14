@@ -80,8 +80,9 @@ angular.module('ecmsEcmsUiApp')
                 'Content-Type': 'application/json',
                 'X-ECMS-Session': ecmsSession.getSession()
             });
-            Restangular.all(RESTAPIversion + '/documents?' + paramsToString.implode(paramsValue)).
-                customGET('DocumentSearch').
+
+            //paramsToString.implode(paramsValue)
+            Restangular.all(RESTAPIversion + '/documents').post(angular.toJson(paramsValue)).
                 then(function (resp) {
                     $rootScope.state.searchResults = resp.data.DocumentSearch.SearchHit;
                     $rootScope.state.totalItems = resp.data.DocumentSearch.TotalHits;

@@ -121,19 +121,27 @@ module.exports = function (grunt) {
             },
             server: {
                 options: {
-                    port: 9000,
+                    port: 8080,
                     // Change this to '0.0.0.0' to access the server from outside.
-                    hostname: '0.0.0.0',
+                    hostname: 'localhost',
                     livereload: 39665
                 },
                 proxies: [
                     {
                         context: '/ecms/rest',
-                        host: 'ecmsweb301.dc4.pqe',
-                        port: 9000,
+                        host: 'localhost',
+                        port: 8080,
                         https: false
                     }
                 ]
+                //proxies: [
+                //    {
+                //        context: '/ecms/rest',
+                //        host: 'ecmsweb301.dc4.pqe',
+                //        port: 9000,
+                //        https: false
+                //    }
+                //]
             }
         },
 

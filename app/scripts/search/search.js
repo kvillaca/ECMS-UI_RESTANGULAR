@@ -8,9 +8,5 @@
  */
 angular.module('ecmsEcmsUiApp')
     .controller('SearchCtrl', function () { //$scope, $rootScope, $window, goTo, updateDocumentInfo
-        //
-        //$scope.goTo = function(valueForSeach) {
-        //    console.log('doc.js - $scope');
-        //    goTo.go(valueForSeach);
-        //}
+
     });
